@@ -322,19 +322,63 @@ def find_game_dir(arg=None):
     return None
 
 
+def say_no_access(path):
+    say("")
+    say("  ! НЕТ ПРАВ НА ЗАПИСЬ в папку игры:")
+    say(f"      {path}")
+    say("")
+    say("    Игра стоит в Program Files, а Windows запрещает писать туда")
+    say("    без прав администратора. Закрой это окно и запусти так:")
+    say("")
+    say("      1. Пуск -> набери  cmd")
+    say("      2. правой кнопкой на \"Командная строка\" -> Запуск от имени администратора")
+    say("      3. в открывшемся окне:")
+    say('           cd /d "' + str(path.parent.parent) + '"')
+    say("           py te1_randomizer.py --auto")
+    say("")
+    say("    Либо правой кнопкой на .bat-файле -> Запуск от имени администратора.")
+    say("")
+
+
+def writable(data_dir: Path) -> bool:
+    """Ранняя проба: можно ли вообще писать в папку игры.
+
+    Без неё случай «игра в Program Files, консоль без прав администратора»
+    выглядит как вечно занятой файл, и совет получается неверный.
+    """
+    probe = data_dir / ".te1_write_test"
+    try:
+        probe.write_bytes(b"x")
+    except OSError:
+        return False
+    try:
+        probe.unlink()
+    except OSError:
+        pass
+    return True
+
+
 def get_original(data_dir: Path, lang: str):
     """Оригинальный текст items_<lang>.dat (из .bak, если он есть)."""
     f = data_dir / f"items_{lang}.dat"
     bak = data_dir / f"items_{lang}.dat.bak"
     src = bak if bak.exists() else f
-    raw = src.read_bytes()
+    try:
+        raw = src.read_bytes()
+    except OSError as e:
+        say(f"  ! не смог прочитать {src.name}: {e}")
+        return None, None, 0
     plain, enc = detect_plain(raw)
     if not plain:
         say("  ! файл зашифрован (Blowfish) - этот скрипт работает только")
         say("    с открытыми .dat. Возьми te1_mod.py, он умеет расшифровывать.")
         return None, None, 0
     if not bak.exists():
-        shutil.copy2(f, bak)
+        try:
+            shutil.copy2(f, bak)
+        except OSError:
+            say_no_access(bak)
+            return None, None, 0
         say(f"  бэкап создан: {bak.name}")
     return raw.decode(enc, "replace"), enc, src.stat().st_size
 
@@ -350,6 +394,9 @@ def pick_language(data_dir: Path):
 # ------------------------------------------------------------------ режимы
 def mode_once(data_dir: Path, lang: str, chaos: int, seed):
     say(f"\n=== Разовая рандомизация: items_{lang}.dat ===")
+    if not writable(data_dir):
+        say_no_access(data_dir / f"items_{lang}.dat")
+        return False
     text, enc, size = get_original(data_dir, lang)
     if text is None:
         return False
@@ -368,7 +415,11 @@ def mode_once(data_dir: Path, lang: str, chaos: int, seed):
         say("  отменено")
         return True
 
-    atomic_write(data_dir / f"items_{lang}.dat", data)
+    try:
+        atomic_write(data_dir / f"items_{lang}.dat", data)
+    except OSError:
+        say_no_access(data_dir / f"items_{lang}.dat")
+        return False
     say(f"  записано, размер не изменился: {size} байт")
     say("  val.dat трогать не нужно (валидатор проверяет только размер)")
     say("\n  ВАЖНО: это разовая версия - при следующей загрузке карты")
@@ -378,6 +429,9 @@ def mode_once(data_dir: Path, lang: str, chaos: int, seed):
 
 def mode_auto(data_dir: Path, lang: str, chaos: int, interval: float, launch: bool):
     say(f"\n=== АВТО-РЕЖИМ: рандомизация при каждой загрузке карты ===")
+    if not writable(data_dir):
+        say_no_access(data_dir / f"items_{lang}.dat")
+        return False
     text, enc, size = get_original(data_dir, lang)
     if text is None:
         return False
@@ -444,7 +498,12 @@ def do_restore(data_dir: Path):
     n = 0
     for bak in sorted(data_dir.glob("*.dat.bak")):
         target = data_dir / bak.name[:-4]
-        shutil.copy2(bak, target)
+        try:
+            shutil.copy2(bak, target)
+        except OSError as e:
+            say(f"  ! не смог восстановить {target.name}: {e}")
+            say_no_access(target)
+            continue
         say(f"  восстановлен {target.name}")
         n += 1
     if n == 0:
