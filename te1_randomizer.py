@@ -3,18 +3,33 @@
 """
 te1_randomizer.py - randomizer predmetov dlya The Escapists 1 (PC / Steam).
 
-Odin fail, nikakih zavisimostej krome Python 3.
-Zapusk:  py te1_randomizer.py
+Odin fail, bez zavisimostej krome Python 3.
 
-U kazhdogo predmeta sluchajno menyayutsya svojstva: uron, kopka, dolbezka,
-rezka, otkruchivanie, lechenie, snyatie ustalosti, legalnost, cena, iznos,
-cennost kak podarka. Podushkoj dejstvitelno mozhno lomata steny ili sest' ee.
+REZHIMY:
+  py te1_randomizer.py            obychnyj: odin raz peretasovat i vyjti
+  py te1_randomizer.py --auto     AVTO: zapustit igru i tasovat PERED KAZDOJ
+                                  zagruzkoj karty (mezhdu dnyami NE tasuet)
+  py te1_randomizer.py --restore  vernut' original
 
-Bezopasnost:
-  * pered zapisiyu delaet backup items_*.dat i val.dat;
-  * sam peresobiraet val.dat (inache igra ne zapustitsya - ona
-    proveryaet RAZMER failov);
-  * otkat: py te1_randomizer.py --restore
+KAK RABOTAET AVTO-REZHIM
+------------------------
+V bajtkode igry (frejm `game`, gruppa #425, uslovie "nachalo frejma") est':
+
+    INI_ITEMS: otkryt' fail "Data\items_" + <yazyk> + ".dat"
+
+Eto edinstvennoe mesto, gde chitaetsya items_*.dat. Ono vypolnyaetsya
+ODIN RAZ pri vhode vo frejm `game`, to est' pri kazdoj zagruzke karty.
+Mezhdu dnyami fail NE perechityvaetsya.
+
+Poetomu skript derzhit v items_*.dat svezhuyu sluchajnuyu versiyu:
+  zagruzil kartu  -> igra prochitala tekushchuyu versiyu  -> novye statty
+  idut dni        -> fail ne chitaetsya                   -> statty te zhe
+  vyshel, zashyol -> frejm nachalsya snova                 -> snova tasovanie
+
+Razmer faila derzhitsya POSTOYANNYM (dobivaetsya pustymi strokami),
+poetomu val.dat trogat' ne nuzhno i validator ne rugaetsya.
+Zapis' atomarnaya (vremennyj fail + rename), tak chto igra ne mozhet
+popast' na napologvinu zapisanij fail.
 """
 from __future__ import annotations
 
@@ -22,15 +37,14 @@ import hashlib
 import os
 import random
 import shutil
+import subprocess
 import sys
+import time
 from pathlib import Path
 
-VERSION = "1.0"
+VERSION = "2.0"
 
-# папка игры по умолчанию (твоя)
 GAME_DIR = r"C:\Program Files (x86)\Steam\steamapps\common\The Escapists"
-
-# возможные пути, если стандартный не подойдёт
 FALLBACK_DIRS = [
     r"C:\Program Files\Steam\steamapps\common\The Escapists",
     r"D:\Steam\steamapps\common\The Escapists",
@@ -38,7 +52,6 @@ FALLBACK_DIRS = [
     r"E:\SteamLibrary\steamapps\common\The Escapists",
 ]
 
-# какие поля рандомизируем и из каких значений
 STAT_POOLS = {
     "Weapon":     [0, 1, 1, 2, 2, 3, 3, 4, 5],
     "Digging":    [0, 0, 1, 1, 2, 2, 3, 5],
@@ -52,9 +65,9 @@ STAT_POOLS = {
     "Buy":        [0, 5, 10, 20, 30, 50, 75, 100],
 }
 
-# эти поля НЕ трогаем: они отвечают за появление предмета в мире
-PROTECTED = {"Name", "Craft", "Found", "Desk", "NPC_carry", "Outfit", "Info",
-             "CamDis", "Illegal"}
+# Что НЕ трогаем никогда: Name (имя), Craft (текст рецепта), Found, Desk,
+# NPC_carry, Outfit, Info, CamDis. Трогаем только игровые статы из STAT_POOLS
+# плюс Illegal (нелегальность) на уровне хаоса >= 2.
 
 
 # ------------------------------------------------------------------ консоль
@@ -69,8 +82,8 @@ def _fix_console():
 _fix_console()
 
 
-def say(*a):
-    print(*a)
+def say(*a, end="\n"):
+    print(*a, end=end, flush=True)
 
 
 def ask(prompt, default=None):
@@ -80,8 +93,6 @@ def ask(prompt, default=None):
 
 # ------------------------------------------------------------------ кодировки
 def detect_plain(raw: bytes):
-    """(открытый_текст?, кодировка). UTF-16 содержит нули, поэтому
-    обычная проверка «много ли печатных байтов» его отвергает."""
     if not raw:
         return False, None
     if raw.startswith(b"\xff\xfe"):
@@ -90,11 +101,8 @@ def detect_plain(raw: bytes):
         return True, "utf-16-be"
     if raw.startswith(b"\xef\xbb\xbf"):
         return True, "utf-8-sig"
-
     head = raw[:2048]
-    nulls = head.count(b"\x00")
-
-    if nulls > len(head) * 0.15:                    # похоже на UTF-16
+    if head.count(b"\x00") > len(head) * 0.15:
         for enc in ("utf-16-le", "utf-16-be"):
             try:
                 t = head.decode(enc)
@@ -104,7 +112,6 @@ def detect_plain(raw: bytes):
             if t and pr / len(t) > 0.85:
                 return True, enc
         return False, None
-
     textish = sum(1 for c in head if 32 <= c < 127 or c in (9, 10, 13))
     if textish / len(head) > 0.85:
         for enc in ("utf-8", "cp1251"):
@@ -114,9 +121,7 @@ def detect_plain(raw: bytes):
             except UnicodeDecodeError:
                 continue
         return True, "latin-1"
-
-    high = sum(1 for c in head if c >= 0x80)        # кириллица без BOM
-    if high > len(head) * 0.10:
+    if sum(1 for c in head if c >= 0x80) > len(head) * 0.10:
         try:
             raw.decode("utf-8")
             return True, "utf-8"
@@ -133,16 +138,14 @@ def detect_plain(raw: bytes):
 
 # ------------------------------------------------------------------ val.dat
 def md5_size(size: int) -> str:
-    """Ровно тот хеш, который проверяет игра."""
     return hashlib.md5(("l0l_%d" % size).encode()).hexdigest()
 
 
 def rebuild_val(data_dir: Path):
+    import re
     vpath = data_dir / "val.dat"
     if not vpath.exists():
-        say("  ! val.dat не найден - пропускаю (игра может не запуститься)")
         return 0
-    import re
     txt = vpath.read_bytes().decode("utf-16-le", "replace")
     bom = txt.startswith("\ufeff")
     if bom:
@@ -163,8 +166,7 @@ def rebuild_val(data_dir: Path):
                 toks[i] = md5_size(fp.stat().st_size)
         txt = txt[:m.start()] + m.group(1) + m.group(2) + "_".join(toks) + txt[m.end():]
         changed += 1
-    out = ("\ufeff" if bom else "") + txt
-    vpath.write_bytes(out.encode("utf-16-le"))
+    vpath.write_bytes((("\ufeff" if bom else "") + txt).encode("utf-16-le"))
     return changed
 
 
@@ -179,43 +181,109 @@ def parse_items(text: str):
             items[int(m.group(1))] = cur
             order.append(int(m.group(1)))
             continue
-        m = re.match(r"^\s*([A-Za-z_]+)\s*=\s*(.*)$", line)
+        m = re.match(r"^\s*([A-Za-z_]+)\s*=(.*)$", line)
         if m and cur is not None:
-            cur[m.group(1)] = m.group(2)
+            cur[m.group(1)] = m.group(2)   # значение дословно, с пробелами
     return items, order
 
 
 def build_text(header: str, items: dict, order: list, newline: str) -> str:
-    out = [header.rstrip("\r\n")] if header.strip() else []
+    """Собирает INI обратно. Блоки разделены пустой строкой, как в оригинале;
+    перед первым блоком пустой строки нет и хвостового перевода строки тоже,
+    чтобы пересборка без правок давала байт-в-байт тот же файл."""
+    blocks = []
     for iid in order:
-        out.append("")
-        out.append(f"[{iid}]")
+        lines = [f"[{iid}]"]
         for k, v in items[iid].items():
-            out.append(f"{k}={v}")
-    return newline.join(out) + newline
+            lines.append(f"{k}={v}")
+        blocks.append(newline.join(lines))
+    body = (newline + newline).join(blocks)
+    if header.strip():
+        return header.rstrip("\r\n") + newline + newline + body
+    return body
 
 
-# ------------------------------------------------------------------ ядро
-def find_game_dir(arg=None):
-    cands = ([arg] if arg else []) + [GAME_DIR] + FALLBACK_DIRS + [os.getcwd()]
-    for c in cands:
-        if c and os.path.isdir(os.path.join(c, "Data")):
-            return Path(c)
-    return None
+# ------------------------------------------------------------------ генерация
+def _block_len(iid, props, enc, nl):
+    """Длина блока [id] в байтах. Блоки в файле разделены фиксированными
+    разделителями, поэтому по дельте блока точно видно дельту всего файла."""
+    s = f"[{iid}]" + "".join(f"{nl}{k}={v}" for k, v in props.items())
+    return len(s.encode(enc, "replace"))
 
 
-def randomize(items: dict, order: list, rnd: random.Random, chaos: int):
-    """→ список строк-примеров того, что изменилось."""
+def make_version(orig_text: str, seed, chaos: int, enc: str, target_size: int):
+    """Случайная версия файла, подогнанная РОВНО под target_size байт.
+
+    Размер обязан остаться прежним: тогда val.dat трогать не нужно и
+    валидатор игры не ругается. Предметы берутся в случайном порядке и
+    правятся один за другим, пока хватает байтового бюджета; удаление
+    поля (стат = 0) бюджет освобождает.
+    Возвращает (bytes, изменено_предметов, лог) или (None, 0, []).
+    """
+    nl = "\r\n" if "\r\n" in orig_text else "\n"
+    nlb = nl.encode(enc)
+    header = orig_text.split("[", 1)[0]
+    items, order = parse_items(orig_text)
+    base = build_text(header, items, order, nl)
+    used = len(base.encode(enc, "replace"))
+    if used > target_size:
+        return None, 0, []
+
+    rnd = random.Random(seed)
     keys = list(STAT_POOLS)
-    log = []
-    touched = 0
-    for iid in order:
-        it = items[iid]
-        nm = (it.get("Name") or "").strip().lower()
-        if nm in ("", "empty", "none"):
-            continue
+    log, touched = [], 0
+    changed = set()
 
-        before = {k: it.get(k) for k in keys}
+    def note(iid, it, bk):
+        nonlocal touched
+        diff = [f"{k}={it.get(k) or 0}" for k in keys if it.get(k) != bk[k]]
+        if diff:
+            touched += 1
+            changed.add(iid)
+            if len(log) < 18:
+                log.append(f"    [{iid:>3}] {(it.get('Name') or '?').strip()[:30]:30} "
+                           + ", ".join(diff))
+        return bool(diff)
+
+    def usable(iid):
+        return (items[iid].get("Name") or "").strip().lower() not in ("", "empty", "none")
+
+    # --- фаза 1: перетасовать значения УЖЕ СУЩЕСТВУЮЩИХ полей.
+    # Новых строк не появляется, поэтому размер почти не растёт и правки
+    # достаются практически каждому предмету.
+    ph1 = order[:]
+    rnd.shuffle(ph1)
+    for iid in ph1:
+        it = items[iid]
+        if not usable(iid):
+            continue
+        present = [k for k in keys if k in it]
+        if not present:
+            continue
+        before = dict(it)
+        bk = {k: it.get(k) for k in keys}
+        for k in rnd.sample(present, max(1, len(present) - rnd.randint(0, 1))):
+            v = rnd.choice(STAT_POOLS[k])
+            if v == 0:
+                it.pop(k, None)            # поле исчезает -> освобождает байты
+            else:
+                it[k] = str(v)
+        delta = _block_len(iid, it, enc, nl) - _block_len(iid, before, enc, nl)
+        if used + delta > target_size:
+            items[iid] = before
+            continue
+        used += delta
+        note(iid, it, bk)
+
+    # --- фаза 2: на оставшийся бюджет раздаём предметы новыми полями
+    ph2 = [i for i in order if i not in changed]
+    rnd.shuffle(ph2)
+    for iid in ph2:
+        it = items[iid]
+        if not usable(iid):
+            continue
+        before = dict(it)
+        bk = {k: it.get(k) for k in keys}
         n = min(rnd.randint(1, 2 + chaos), len(keys))
         for k in rnd.sample(keys, n):
             v = rnd.choice(STAT_POOLS[k])
@@ -223,77 +291,151 @@ def randomize(items: dict, order: list, rnd: random.Random, chaos: int):
                 it.pop(k, None)
             else:
                 it[k] = str(v)
-
         if chaos >= 2 and rnd.random() < 0.4:
             it["Illegal"] = "1" if rnd.random() < 0.5 else "0"
+        delta = _block_len(iid, it, enc, nl) - _block_len(iid, before, enc, nl)
+        if used + delta > target_size:
+            items[iid] = before
+            continue
+        used += delta
+        note(iid, it, bk)
 
-        diff = []
-        for k in keys:
-            if it.get(k) != before[k]:
-                diff.append(f"{k}={it.get(k) or 0}")
-        if diff:
-            touched += 1
-            if len(log) < 20:
-                log.append(f"    [{iid:>3}] {it.get('Name','?')[:30]:30} {', '.join(diff)}")
-    return touched, log
+    data = build_text(header, items, order, nl).encode(enc, "replace")
+    if len(data) > target_size:
+        return None, 0, []
+    reps, rem = divmod(target_size - len(data), len(nlb))
+    data = data + nlb * reps + b" " * rem
+    return (data, touched, log) if len(data) == target_size else (None, 0, [])
 
 
-def do_randomize(data_dir: Path, lang: str, seed, chaos: int, apply_it: bool):
+def atomic_write(path: Path, data: bytes):
+    tmp = path.with_name(path.name + ".tmp")
+    tmp.write_bytes(data)
+    os.replace(tmp, path)          # атомарно: игра не увидит полфайла
+
+
+# ------------------------------------------------------------------ пути
+def find_game_dir(arg=None):
+    for c in ([arg] if arg else []) + [GAME_DIR] + FALLBACK_DIRS + [os.getcwd()]:
+        if c and os.path.isdir(os.path.join(c, "Data")):
+            return Path(c)
+    return None
+
+
+def get_original(data_dir: Path, lang: str):
+    """Оригинальный текст items_<lang>.dat (из .bak, если он есть)."""
     f = data_dir / f"items_{lang}.dat"
-    if not f.exists():
-        say(f"  ! файл не найден: {f}")
-        return False
-
-    raw = f.read_bytes()
+    bak = data_dir / f"items_{lang}.dat.bak"
+    src = bak if bak.exists() else f
+    raw = src.read_bytes()
     plain, enc = detect_plain(raw)
     if not plain:
-        say("  ! файл зашифрован (Blowfish). Этот скрипт работает только с")
-        say("    открытыми .dat - возьми te1_mod.py, он умеет расшифровывать.")
+        say("  ! файл зашифрован (Blowfish) - этот скрипт работает только")
+        say("    с открытыми .dat. Возьми te1_mod.py, он умеет расшифровывать.")
+        return None, None, 0
+    if not bak.exists():
+        shutil.copy2(f, bak)
+        say(f"  бэкап создан: {bak.name}")
+    return raw.decode(enc, "replace"), enc, src.stat().st_size
+
+
+def pick_language(data_dir: Path):
+    langs = [f.stem.split("_")[1] for f in data_dir.glob("items_*.dat")
+             if len(f.stem.split("_")) == 2 and len(f.stem.split("_")[1]) == 3]
+    if not langs:
+        return None
+    return "rus" if "rus" in langs else langs[0]
+
+
+# ------------------------------------------------------------------ режимы
+def mode_once(data_dir: Path, lang: str, chaos: int, seed):
+    say(f"\n=== Разовая рандомизация: items_{lang}.dat ===")
+    text, enc, size = get_original(data_dir, lang)
+    if text is None:
         return False
+    say(f"  предметов в файле: {len(parse_items(text)[1])}, кодировка {enc}")
 
-    text = raw.decode(enc, "replace")
-    items, order = parse_items(text)
-    if not items:
-        say("  ! не похоже на items_*.dat (нет блоков [ID])")
+    data, touched, log = make_version(text, seed, chaos, enc, size)
+    if data is None:
+        say("  ! случайная версия длиннее оригинала - уменьши уровень хаоса")
         return False
-
-    say(f"  файл:      {f.name}")
-    say(f"  кодировка: {enc}")
-    say(f"  предметов: {len(items)} (ID {min(order)}..{max(order)})")
-    say(f"  сид:       {seed if seed is not None else 'случайный'}")
-    say(f"  хаос:      {chaos}")
-
-    rnd = random.Random(seed)
-    touched, log = randomize(items, order, rnd, chaos)
-
-    say(f"\n  изменено предметов: {touched}")
+    say(f"  изменено предметов: {touched}, сид {seed}")
     say("  примеры:")
     say("\n".join(log))
     if touched > len(log):
         say(f"    ... и ещё {touched - len(log)}")
-
-    if not apply_it:
-        say("\n  (это был предпросмотр - файл НЕ изменён)")
+    if ask("\nПрименить? (y/n)", "n").lower() != "y":
+        say("  отменено")
         return True
 
-    # бэкапы
-    for p in (f, data_dir / "val.dat"):
-        if p.exists():
-            bak = p.with_name(p.name + ".bak")
-            if not bak.exists():
-                shutil.copy2(p, bak)
-                say(f"\n  бэкап: {bak.name}")
+    atomic_write(data_dir / f"items_{lang}.dat", data)
+    say(f"  записано, размер не изменился: {size} байт")
+    say("  val.dat трогать не нужно (валидатор проверяет только размер)")
+    say("\n  ВАЖНО: это разовая версия - при следующей загрузке карты")
+    say("  предметы будут ТЕ ЖЕ. Для авто-режима: py te1_randomizer.py --auto")
+    return True
 
-    nl = "\r\n" if "\r\n" in text else "\n"
-    header = text.split("[", 1)[0]
-    new_text = build_text(header, items, order, nl)
-    f.write_bytes(new_text.encode(enc, "replace"))
-    say(f"  записано: {f.name} ({f.stat().st_size} байт)")
 
-    n = rebuild_val(data_dir)
-    say(f"  val.dat пересобран ({n} языков) - валидатор не будет ругаться")
-    say("\n  Готово. Запускай игру.")
-    say("  Откат:  py te1_randomizer.py --restore")
+def mode_auto(data_dir: Path, lang: str, chaos: int, interval: float, launch: bool):
+    say(f"\n=== АВТО-РЕЖИМ: рандомизация при каждой загрузке карты ===")
+    text, enc, size = get_original(data_dir, lang)
+    if text is None:
+        return False
+    n_items = len(parse_items(text)[1])
+    say(f"  файл: items_{lang}.dat ({n_items} предметов, {size} байт, {enc})")
+    say(f"  хаос {chaos}, обновление раз в {interval:g} сек")
+    say("")
+    say("  Как это работает:")
+    say("    игра читает items_*.dat только при входе во фрейм `game`,")
+    say("    то есть при загрузке карты. Между днями файл не читается.")
+    say("    Поэтому: зашёл на карту -> новые статы; дни -> те же статы;")
+    say("    вышел и зашёл снова -> опять новые.")
+    say("")
+    say("  Держи это окно открытым, пока играешь.")
+    say("  Остановка: Ctrl+C  (оригинал вернётся командой --restore)")
+
+    exe = data_dir.parent / "TheEscapists.exe"
+    if launch and exe.exists():
+        say(f"\n  Запускаю игру: {exe.name}")
+        try:
+            subprocess.Popen([str(exe)], cwd=str(exe.parent))
+        except Exception as e:
+            say(f"  ! не смог запустить: {e}")
+
+    target = data_dir / f"items_{lang}.dat"
+    rnd = random.Random()
+    count = 0
+    last_err = ""
+    try:
+        while True:
+            seed = rnd.randrange(1, 2 ** 31)
+            data, touched, _ = make_version(text, seed, chaos, enc, size)
+            if data is None:
+                say("  ! версия не влезла в исходный размер - снизь хаос")
+                break
+            try:
+                atomic_write(target, data)
+                count += 1
+                last_err = ""
+                say(f"\r  [{time.strftime('%H:%M:%S')}] версия #{count} "
+                    f"(сид {seed}, {touched} предметов)   ", end="")
+            except PermissionError:
+                if last_err != "locked":
+                    say("\n  (файл занят игрой - подожду)")
+                    last_err = "locked"
+            except OSError as e:
+                if str(e) != last_err:
+                    say(f"\n  ! {e}")
+                    last_err = str(e)
+            time.sleep(interval)
+    except KeyboardInterrupt:
+        say("\n\n  остановлено")
+        try:
+            want = ask("  Вернуть оригинальный items_*.dat? (y/n)", "y").lower() == "y"
+        except (EOFError, OSError):
+            want = True                      # ввод недоступен - чиним молча
+        if want:
+            do_restore(data_dir)
     return True
 
 
@@ -309,67 +451,61 @@ def do_restore(data_dir: Path):
         say("  бэкапов (.bak) не найдено")
         return
     rebuild_val(data_dir)
-    say(f"  готово, восстановлено файлов: {n}")
+    say(f"  готово, восстановлено: {n}")
 
 
-# ------------------------------------------------------------------ запуск
+# ------------------------------------------------------------------ main
 def main(argv=None):
     argv = list(argv if argv is not None else sys.argv[1:])
-
-    say("\n" + "=" * 58)
+    say("\n" + "=" * 60)
     say("  THE ESCAPISTS 1 - РАНДОМАЙЗЕР ПРЕДМЕТОВ  v" + VERSION)
-    say("=" * 58)
+    say("=" * 60)
 
-    restore = "--restore" in argv
     gd = find_game_dir()
     if not gd:
-        p = ask("\nПапка игры не найдена. Введи путь (где лежит Data\\)")
+        p = ask("\nПапка игры не найдена. Путь (где лежит Data\\)")
         gd = find_game_dir(p)
     if not gd:
         say("  ! не нашёл папку с Data\\ - выход")
         return 1
     say(f"\n  Папка игры: {gd}")
-
     data = gd / "Data"
-    if restore:
+
+    if "--restore" in argv:
         do_restore(data)
         input("\n[Enter] - выход...")
         return 0
 
-    # язык
-    langs = [f.stem.split("_")[1] for f in data.glob("items_*.dat")]
-    langs = [l for l in langs if len(l) == 3]
-    if "rus" in langs:
-        default_lang = "rus"
-    elif langs:
-        default_lang = langs[0]
-    else:
-        say("  ! в Data нет ни одного items_*.dat")
+    lang = pick_language(data)
+    if not lang:
+        say("  ! в Data нет items_*.dat")
         return 1
-    say(f"  Найденные языки: {', '.join(langs)}")
-    lang = ask("Язык (какой файл правим)", default_lang)
+    say(f"  Язык: {lang}")
 
+    auto = "--auto" in argv
     chaos = ask("Уровень хаоса 1-4 (1=мягко, 4=полный)", "2")
     try:
         chaos = max(1, min(4, int(chaos)))
     except ValueError:
         chaos = 2
 
-    s = ask("Сид (число - для повторимости, пусто = случайный)")
-    seed = int(s) if s.lstrip("-").isdigit() else None
+    if auto:
+        iv = ask("Обновлять файл раз в N секунд", "2")
+        try:
+            iv = max(0.5, float(iv))
+        except ValueError:
+            iv = 2.0
+        lc = ask("Запустить игру сейчас? (y/n)", "y").lower() == "y"
+        return 0 if mode_auto(data, lang, chaos, iv, lc) else 1
 
-    say("")
-    do_randomize(data, lang, seed, chaos, apply_it=False)
-
-    if ask("\nПрименить? (y/n)", "n").lower() != "y":
-        say("  отменено, файлы не тронуты")
-        input("\n[Enter] - выход...")
-        return 0
-
-    say("")
-    do_randomize(data, lang, seed, chaos, apply_it=True)
+    s = ask("Сид (число = повторяемо, пусто = случайный)")
+    seed = int(s) if s.lstrip("-").isdigit() else random.randrange(1, 2 ** 31)
+    ok = mode_once(data, lang, chaos, seed)
+    if ok:
+        say("\n  Хочешь, чтобы рандомизация была при КАЖДОЙ загрузке карты?")
+        say("  Тогда: py te1_randomizer.py --auto")
     input("\n[Enter] - выход...")
-    return 0
+    return 0 if ok else 1
 
 
 if __name__ == "__main__":
