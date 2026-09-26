@@ -14,9 +14,10 @@
 | Свой предмет ID 279 (+ `mods/` лоадер) | ✅ `toolkit/GUIDE.md` |
 | Расшифровка чанков exe (порт CTFAK-Native) | ✅ `toolkit/te_crypto.py` |
 | Карта «ID предмета → иконка в exe» (281 слот, проверено визуально) | ✅ `toolkit/te1_icons.py`, `toolkit/item_icon_map.json` |
-| События фрейма `game` (2.4 МБ байткода механик) | ✅ расшифрованы (`docs/MECHANICS.md`), правка — отдельная задача |
 | Свои тайл-текстуры | ✅ официально: `Data/images/custom/` |
 | Своя иконка (байт-патч exe / Fusion) | ⚠️ маршрут известен, не доведён |
+| **Байткод событий (вся логика игры)** | ✅ **расшифрован, читается и ПАТЧИТСЯ** — см. `docs/EVENTS_BREAKTHROUGH.md` |
+| Новая механика «дверь по форме» в любой тюрьме | ✅ `tools/te1_patch.py outfitdoor` (собрано и проверено парсером) |
 
 ## Структура репо
 
@@ -27,8 +28,10 @@ docs/          — вся документация (читать отсюда)
   NEXT_STEPS.md             — таблицы val.dat, паспорт файлов Data
   RESULTS.md                — итог прошлой сессии (иконки расшифрованы)
   MECHANICS.md              — механики (события Fusion): дверь по форме и т.п.
+  EVENTS_BREAKTHROUGH.md    — ★ НОВЫЙ: формат событий + как патчить exe (читать для механик)
 toolkit/       — РАБОЧИЕ ИНСТРУМЕНТЫ + гайды (GUIDE.md — с него начинаешь)
-tools/         — исследовательские скрипты (дампер картинок, парсер чанков, исходники CTFAK)
+tools/         — скрипты: дампер картинок, te1_frames/te1_events/te1_patch (события), исходники CTFAK
+dumps/         — game_events.txt: ВСЯ логика фрейма game в читаемом виде (5473 группы)
 reference/     — справочники: все 279 предметов (csv/json), 774 объекта игры
 imagebank/     — 3948 PNG из TheEscapists_eur.exe + images.csv (индекс хендлов)
 exe/           — сами exe (переименованы в .txt): main / eur / rus
@@ -47,6 +50,16 @@ Copy-Item "$g\Data\items_rus.dat" "$g\mods\items_rus.dat"
 py append_item.py --items "$g\mods\items_rus.dat" --block item_279_block.txt --no-val
 # запуск: Запустить_с_модами.bat
 ```
+
+## Новая механика (дверь по форме) — уже работает
+
+```bash
+python3 tools/te1_patch.py outfitdoor exe/TheEscapists_eur.exe.txt \
+    --map perks --outfit 38 --x 512 --y 320 -o work/perks_medicdoor.exe.txt
+```
+
+Ставит `Door - outfit` (handle 501) в Center Perks; проход только в
+Infirmary Overalls (ID 38). Подробности и список форм — `docs/EVENTS_BREAKTHROUGH.md`.
 
 ## Зависимости
 
