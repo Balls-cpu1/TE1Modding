@@ -1,0 +1,926 @@
+[
+ {
+  "combo": "1_-1_53",
+  "output": 71,
+  "output_name": "Staff Key Mold",
+  "components": [
+   "Staff Key",
+   "Wad of Putty"
+  ]
+ },
+ {
+  "combo": "-1_53_7",
+  "output": 82,
+  "output_name": "Utility Key Mold",
+  "components": [
+   "Wad of Putty",
+   "Utility Key"
+  ]
+ },
+ {
+  "combo": "0_-1_53",
+  "output": 83,
+  "output_name": "Cell Key Mold",
+  "components": [
+   "Cell Key",
+   "Wad of Putty"
+  ]
+ },
+ {
+  "combo": "-1_53_6",
+  "output": 89,
+  "output_name": "Entrance Key Mold",
+  "components": [
+   "Wad of Putty",
+   "Entrance Key"
+  ]
+ },
+ {
+  "combo": "-1_43_53",
+  "output": 59,
+  "output_name": "Work Key Mold",
+  "components": [
+   "Work Key",
+   "Wad of Putty"
+  ]
+ },
+ {
+  "combo": "-1_82_84",
+  "output": 85,
+  "output_name": "Plastic Utility Key",
+  "components": [
+   "Utility Key Mold",
+   "Molten Plastic"
+  ]
+ },
+ {
+  "combo": "-1_71_84",
+  "output": 86,
+  "output_name": "Plastic Staff Key",
+  "components": [
+   "Staff Key Mold",
+   "Molten Plastic"
+  ]
+ },
+ {
+  "combo": "-1_83_84",
+  "output": 87,
+  "output_name": "Plastic Cell Key",
+  "components": [
+   "Cell Key Mold",
+   "Molten Plastic"
+  ]
+ },
+ {
+  "combo": "-1_84_89",
+  "output": 88,
+  "output_name": "Plastic Entrance Key",
+  "components": [
+   "Molten Plastic",
+   "Entrance Key Mold"
+  ]
+ },
+ {
+  "combo": "-1_59_84",
+  "output": 58,
+  "output_name": "Plastic Work Key",
+  "components": [
+   "Work Key Mold",
+   "Molten Plastic"
+  ]
+ },
+ {
+  "combo": "13_4_95",
+  "output": 128,
+  "output_name": "Cushioned Inmate Outfit",
+  "components": [
+   "Roll of Duct Tape",
+   "Inmate Outfit",
+   "Pillow"
+  ]
+ },
+ {
+  "combo": "13_4_50",
+  "output": 129,
+  "output_name": "Padded Inmate Outfit",
+  "components": [
+   "Roll of Duct Tape",
+   "Inmate Outfit",
+   "Book"
+  ]
+ },
+ {
+  "combo": "13_4_76",
+  "output": 130,
+  "output_name": "Plated Inmate Outfit",
+  "components": [
+   "Roll of Duct Tape",
+   "Inmate Outfit",
+   "Sheet of Metal"
+  ]
+ },
+ {
+  "combo": "127_13_95",
+  "output": 142,
+  "output_name": "Cushioned POW Outfit",
+  "components": [
+   "POW Outfit",
+   "Roll of Duct Tape",
+   "Pillow"
+  ]
+ },
+ {
+  "combo": "127_13_50",
+  "output": 143,
+  "output_name": "Padded POW Outfit",
+  "components": [
+   "POW Outfit",
+   "Roll of Duct Tape",
+   "Book"
+  ]
+ },
+ {
+  "combo": "127_13_76",
+  "output": 144,
+  "output_name": "Plated POW Outfit",
+  "components": [
+   "POW Outfit",
+   "Roll of Duct Tape",
+   "Sheet of Metal"
+  ]
+ },
+ {
+  "combo": "-1_12_13",
+  "output": 182,
+  "output_name": "Wooden Bat",
+  "components": [
+   "Timber",
+   "Roll of Duct Tape"
+  ]
+ },
+ {
+  "combo": "12_13_179",
+  "output": 183,
+  "output_name": "Spiked Bat",
+  "components": [
+   "Timber",
+   "Roll of Duct Tape",
+   "Nails"
+  ]
+ },
+ {
+  "combo": "-1_17_94",
+  "output": 124,
+  "output_name": "Comb Blade",
+  "components": [
+   "Comb",
+   "Razor Blade"
+  ]
+ },
+ {
+  "combo": "-1_13_18",
+  "output": 19,
+  "output_name": "Glass Shank",
+  "components": [
+   "Roll of Duct Tape",
+   "Glass Shard"
+  ]
+ },
+ {
+  "combo": "-1_48_74",
+  "output": 103,
+  "output_name": "Sock Mace",
+  "components": [
+   "Soap",
+   "Sock"
+  ]
+ },
+ {
+  "combo": "-1_73_74",
+  "output": 104,
+  "output_name": "Super Sock Mace",
+  "components": [
+   "Battery",
+   "Sock"
+  ]
+ },
+ {
+  "combo": "12_94_98",
+  "output": 110,
+  "output_name": "Whip",
+  "components": [
+   "Timber",
+   "Razor Blade",
+   "Wire"
+  ]
+ },
+ {
+  "combo": "-1_13_94",
+  "output": 111,
+  "output_name": "Knuckle Duster",
+  "components": [
+   "Roll of Duct Tape",
+   "Razor Blade"
+  ]
+ },
+ {
+  "combo": "12_12_98",
+  "output": 108,
+  "output_name": "Nunchuks",
+  "components": [
+   "Timber",
+   "Timber",
+   "Wire"
+  ]
+ },
+ {
+  "combo": "46_8_90",
+  "output": 105,
+  "output_name": "Cup of Molten Chocolate",
+  "components": [
+   "Bar of Chocolate",
+   "Lighter",
+   "Cup"
+  ]
+ },
+ {
+  "combo": "-1_12_98",
+  "output": 189,
+  "output_name": "Zipline Hook",
+  "components": [
+   "Timber",
+   "Wire"
+  ]
+ },
+ {
+  "combo": "24_73_98",
+  "output": 186,
+  "output_name": "Powered Screwdriver",
+  "components": [
+   "Screwdriver",
+   "Battery",
+   "Wire"
+  ]
+ },
+ {
+  "combo": "158_158_158",
+  "output": 185,
+  "output_name": "Cutting Floss",
+  "components": [
+   "Dental Floss",
+   "Dental Floss",
+   "Dental Floss"
+  ]
+ },
+ {
+  "combo": "13_39_5",
+  "output": 181,
+  "output_name": "Multitool",
+  "components": [
+   "Roll of Duct Tape",
+   "Sturdy Pickaxe",
+   "Sturdy Shovel"
+  ]
+ },
+ {
+  "combo": "-1_12_62",
+  "output": 122,
+  "output_name": "Tool Handle",
+  "components": [
+   "Timber",
+   "File"
+  ]
+ },
+ {
+  "combo": "13_25_25",
+  "output": 112,
+  "output_name": "Grapple Head",
+  "components": [
+   "Roll of Duct Tape",
+   "Crowbar",
+   "Crowbar"
+  ]
+ },
+ {
+  "combo": "-1_112_44",
+  "output": 113,
+  "output_name": "Grappling Hook",
+  "components": [
+   "Grapple Head",
+   "Length of Rope"
+  ]
+ },
+ {
+  "combo": "122_13_76",
+  "output": 115,
+  "output_name": "Flimsy Shovel",
+  "components": [
+   "Tool Handle",
+   "Roll of Duct Tape",
+   "Sheet of Metal"
+  ]
+ },
+ {
+  "combo": "115_13_76",
+  "output": 114,
+  "output_name": "Lightweight Shovel",
+  "components": [
+   "Flimsy Shovel",
+   "Roll of Duct Tape",
+   "Sheet of Metal"
+  ]
+ },
+ {
+  "combo": "114_13_76",
+  "output": 5,
+  "output_name": "Sturdy Shovel",
+  "components": [
+   "Lightweight Shovel",
+   "Roll of Duct Tape",
+   "Sheet of Metal"
+  ]
+ },
+ {
+  "combo": "13_5_76",
+  "output": 5,
+  "output_name": "Sturdy Shovel",
+  "components": [
+   "Roll of Duct Tape",
+   "Sturdy Shovel",
+   "Sheet of Metal"
+  ]
+ },
+ {
+  "combo": "-1_73_98",
+  "output": 54,
+  "output_name": "Candle",
+  "components": [
+   "Battery",
+   "Wire"
+  ]
+ },
+ {
+  "combo": "122_13_25",
+  "output": 118,
+  "output_name": "Flimsy Pickaxe",
+  "components": [
+   "Tool Handle",
+   "Roll of Duct Tape",
+   "Crowbar"
+  ]
+ },
+ {
+  "combo": "118_12_13",
+  "output": 119,
+  "output_name": "Lightweight Pickaxe",
+  "components": [
+   "Flimsy Pickaxe",
+   "Timber",
+   "Roll of Duct Tape"
+  ]
+ },
+ {
+  "combo": "119_12_13",
+  "output": 39,
+  "output_name": "Sturdy Pickaxe",
+  "components": [
+   "Lightweight Pickaxe",
+   "Timber",
+   "Roll of Duct Tape"
+  ]
+ },
+ {
+  "combo": "12_13_39",
+  "output": 39,
+  "output_name": "Sturdy Pickaxe",
+  "components": [
+   "Timber",
+   "Roll of Duct Tape",
+   "Sturdy Pickaxe"
+  ]
+ },
+ {
+  "combo": "13_62_62",
+  "output": 120,
+  "output_name": "Flimsy Cutters",
+  "components": [
+   "Roll of Duct Tape",
+   "File",
+   "File"
+  ]
+ },
+ {
+  "combo": "121_13_62",
+  "output": 61,
+  "output_name": "Sturdy Cutters",
+  "components": [
+   "Lightweight Cutters",
+   "Roll of Duct Tape",
+   "File"
+  ]
+ },
+ {
+  "combo": "120_13_62",
+  "output": 121,
+  "output_name": "Lightweight Cutters",
+  "components": [
+   "Flimsy Cutters",
+   "Roll of Duct Tape",
+   "File"
+  ]
+ },
+ {
+  "combo": "121_13_62",
+  "output": 121,
+  "output_name": "Lightweight Cutters",
+  "components": [
+   "Lightweight Cutters",
+   "Roll of Duct Tape",
+   "File"
+  ]
+ },
+ {
+  "combo": "187_44_57",
+  "output": 188,
+  "output_name": "Makeshift Raft",
+  "components": [
+   "Raft Base",
+   "Length of Rope",
+   "Sail"
+  ]
+ },
+ {
+  "combo": "-1_12_69",
+  "output": 57,
+  "output_name": "Sail",
+  "components": [
+   "Timber",
+   "Bed Sheet"
+  ]
+ },
+ {
+  "combo": "44_56_56",
+  "output": 187,
+  "output_name": "Raft Base",
+  "components": [
+   "Length of Rope",
+   "Balsa Wood",
+   "Balsa Wood"
+  ]
+ },
+ {
+  "combo": "13_179_179",
+  "output": 180,
+  "output_name": "Stinger Strip",
+  "components": [
+   "Roll of Duct Tape",
+   "Nails",
+   "Nails"
+  ]
+ },
+ {
+  "combo": "98_98_98",
+  "output": 174,
+  "output_name": "Fake Fence",
+  "components": [
+   "Wire",
+   "Wire",
+   "Wire"
+  ]
+ },
+ {
+  "combo": "150_152_36",
+  "output": 153,
+  "output_name": "ID Papers",
+  "components": [
+   "Exotic Feather",
+   "Unsigned ID Papers",
+   "Jar of Ink"
+  ]
+ },
+ {
+  "combo": "69_95_95",
+  "output": 126,
+  "output_name": "Bed Dummy",
+  "components": [
+   "Bed Sheet",
+   "Pillow",
+   "Pillow"
+  ]
+ },
+ {
+  "combo": "-1_100_13",
+  "output": 125,
+  "output_name": "Contraband Pouch",
+  "components": [
+   "Foil",
+   "Roll of Duct Tape"
+  ]
+ },
+ {
+  "combo": "100_100_13",
+  "output": 184,
+  "output_name": "Durable Contraband Pouch",
+  "components": [
+   "Foil",
+   "Foil",
+   "Roll of Duct Tape"
+  ]
+ },
+ {
+  "combo": "101_101_36",
+  "output": 116,
+  "output_name": "Fake Wall Block",
+  "components": [
+   "Paper Mache",
+   "Paper Mache",
+   "Jar of Ink"
+  ]
+ },
+ {
+  "combo": "-1_101_101",
+  "output": 117,
+  "output_name": "Fake Vent Cover",
+  "components": [
+   "Paper Mache",
+   "Paper Mache"
+  ]
+ },
+ {
+  "combo": "-1_37_4",
+  "output": 38,
+  "output_name": "Infirmary Overalls",
+  "components": [
+   "Tub of Bleach",
+   "Inmate Outfit"
+  ]
+ },
+ {
+  "combo": "-1_3_37",
+  "output": 38,
+  "output_name": "Infirmary Overalls",
+  "components": [
+   "Guard Outfit",
+   "Tub of Bleach"
+  ]
+ },
+ {
+  "combo": "-1_127_37",
+  "output": 38,
+  "output_name": "Infirmary Overalls",
+  "components": [
+   "POW Outfit",
+   "Tub of Bleach"
+  ]
+ },
+ {
+  "combo": "12_12_12",
+  "output": 75,
+  "output_name": "Unvarnished Chair",
+  "components": [
+   "Timber",
+   "Timber",
+   "Timber"
+  ]
+ },
+ {
+  "combo": "-1_12_12",
+  "output": 72,
+  "output_name": "Timber Brace",
+  "components": [
+   "Timber",
+   "Timber"
+  ]
+ },
+ {
+  "combo": "-1_36_38",
+  "output": 3,
+  "output_name": "Guard Outfit",
+  "components": [
+   "Jar of Ink",
+   "Infirmary Overalls"
+  ]
+ },
+ {
+  "combo": "-1_45_52",
+  "output": 53,
+  "output_name": "Wad of Putty",
+  "components": [
+   "Tube of Toothpaste",
+   "Tub of Talcum Powder"
+  ]
+ },
+ {
+  "combo": "-1_17_8",
+  "output": 84,
+  "output_name": "Molten Plastic",
+  "components": [
+   "Comb",
+   "Lighter"
+  ]
+ },
+ {
+  "combo": "-1_8_96",
+  "output": 84,
+  "output_name": "Molten Plastic",
+  "components": [
+   "Lighter",
+   "Toothbrush"
+  ]
+ },
+ {
+  "combo": "-1_69_69",
+  "output": 81,
+  "output_name": "Sheet Rope",
+  "components": [
+   "Bed Sheet",
+   "Bed Sheet"
+  ]
+ },
+ {
+  "combo": "-1_13_15",
+  "output": 99,
+  "output_name": "Poster",
+  "components": [
+   "Roll of Duct Tape",
+   "Magazine"
+  ]
+ },
+ {
+  "combo": "36_90_93",
+  "output": 102,
+  "output_name": "DIY Tattoo Kit",
+  "components": [
+   "Jar of Ink",
+   "Cup",
+   "Paper Clip"
+  ]
+ },
+ {
+  "combo": "-1_47_51",
+  "output": 101,
+  "output_name": "Paper Mache",
+  "components": [
+   "Roll of Toilet Paper",
+   "Tube of Super Glue"
+  ]
+ },
+ {
+  "combo": "-1_157_51",
+  "output": 101,
+  "output_name": "Paper Mache",
+  "components": [
+   "Deluxe Toilet Roll",
+   "Tube of Super Glue"
+  ]
+ },
+ {
+  "combo": "-1_198_203",
+  "output": 197,
+  "output_name": "Makeshift Explosive Round",
+  "components": [
+   "Explosive Compound",
+   "Metal Cone"
+  ]
+ },
+ {
+  "combo": "-1_193_195",
+  "output": 198,
+  "output_name": "Explosive Compound",
+  "components": [
+   "Mixing Container",
+   "Explosive Mix"
+  ]
+ },
+ {
+  "combo": "192_196_205",
+  "output": 195,
+  "output_name": "Explosive Mix",
+  "components": [
+   "Charcoal",
+   "Fertilizer",
+   "Potassium"
+  ]
+ },
+ {
+  "combo": "-1_207_8",
+  "output": 199,
+  "output_name": "Makeshift Fuse",
+  "components": [
+   "Taper",
+   "Lighter"
+  ]
+ },
+ {
+  "combo": "-1_193_199_",
+  "output": 198,
+  "output_name": "Explosive Compound",
+  "components": [
+   "Mixing Container",
+   "Makeshift Fuse"
+  ]
+ },
+ {
+  "combo": "-1_179_198",
+  "output": 197,
+  "output_name": "Makeshift Explosive Round",
+  "components": [
+   "Nails",
+   "Explosive Compound"
+  ]
+ },
+ {
+  "combo": "13_194_194",
+  "output": 201,
+  "output_name": "Makeshift Tank Firing Base",
+  "components": [
+   "Roll of Duct Tape",
+   "Corrugated Iron",
+   "Corrugated Iron"
+  ]
+ },
+ {
+  "combo": "13_204_204",
+  "output": 200,
+  "output_name": "Makeshift Tank Barrel",
+  "components": [
+   "Roll of Duct Tape",
+   "Metal Tube",
+   "Metal Tube"
+  ]
+ },
+ {
+  "combo": "13_200_201",
+  "output": 202,
+  "output_name": "Makeshift Tank Turret",
+  "components": [
+   "Roll of Duct Tape",
+   "Makeshift Tank Barrel",
+   "Makeshift Tank Firing Base"
+  ]
+ },
+ {
+  "combo": "-1_261_265",
+  "output": 266,
+  "output_name": "Magnetized Needle",
+  "components": [
+   "Magnet",
+   "Needle"
+  ]
+ },
+ {
+  "combo": "-1_269_60",
+  "output": 268,
+  "output_name": "High Beam Flashlight",
+  "components": [
+   "Halogen Bulb",
+   "Flashlight"
+  ]
+ },
+ {
+  "combo": "13_264_268",
+  "output": 270,
+  "output_name": "Navigation Lighting",
+  "components": [
+   "Roll of Duct Tape",
+   "Work Hat",
+   "High Beam Flashlight"
+  ]
+ },
+ {
+  "combo": "-1_271_272",
+  "output": 273,
+  "output_name": "Bowl of Water",
+  "components": [
+   "Reindeer Bowl",
+   "Bottle of Water"
+  ]
+ },
+ {
+  "combo": "262_266_273",
+  "output": 276,
+  "output_name": "Makeshift Compass",
+  "components": [
+   "Cork",
+   "Magnetized Needle",
+   "Bowl of Water"
+  ]
+ },
+ {
+  "combo": "204_267_8",
+  "output": 278,
+  "output_name": "Thruster",
+  "components": [
+   "Metal Tube",
+   "Fuel",
+   "Lighter"
+  ]
+ },
+ {
+  "combo": "243_47_51",
+  "output": 249,
+  "output_name": "Tinsel",
+  "components": [
+   "Glitter",
+   "Roll of Toilet Paper",
+   "Tube of Super Glue"
+  ]
+ },
+ {
+  "combo": "240_73_98",
+  "output": 242,
+  "output_name": "Fairy Lights",
+  "components": [
+   "Bulbs",
+   "Battery",
+   "Wire"
+  ]
+ },
+ {
+  "combo": "218_253_254",
+  "output": 247,
+  "output_name": "Presents",
+  "components": [
+   "Sticky Tape",
+   "Wooden Scooter",
+   "Wrapping Paper"
+  ]
+ },
+ {
+  "combo": "218_254_258",
+  "output": 247,
+  "output_name": "Presents",
+  "components": [
+   "Sticky Tape",
+   "Wrapping Paper",
+   "Wooden Joystick"
+  ]
+ },
+ {
+  "combo": "218_252_254",
+  "output": 247,
+  "output_name": "Presents",
+  "components": [
+   "Sticky Tape",
+   "Wooden Doll",
+   "Wrapping Paper"
+  ]
+ },
+ {
+  "combo": "218_250_254",
+  "output": 247,
+  "output_name": "Presents",
+  "components": [
+   "Sticky Tape",
+   "Wooden Ball",
+   "Wrapping Paper"
+  ]
+ },
+ {
+  "combo": "-1_212_214",
+  "output": 213,
+  "output_name": "Voice Recording",
+  "components": [
+   "Tape Player",
+   "Memoir Tapes"
+  ]
+ },
+ {
+  "combo": "218_219_52",
+  "output": 236,
+  "output_name": "Weak Fingerprint",
+  "components": [
+   "Sticky Tape",
+   "Dirty Glass",
+   "Tub of Talcum Powder"
+  ]
+ },
+ {
+  "combo": "-1_217_236",
+  "output": 221,
+  "output_name": "Fake Fingerprint",
+  "components": [
+   "Blue Putty",
+   "Weak Fingerprint"
+  ]
+ },
+ {
+  "combo": "-1_226_8",
+  "output": 225,
+  "output_name": "Flamethrower",
+  "components": [
+   "Hairspray",
+   "Lighter"
+  ]
+ },
+ {
+  "combo": "231_233_76",
+  "output": 232,
+  "output_name": "Metal Rimmed Hat",
+  "components": [
+   "Cutting Laser Watch",
+   "Pork Pie Hat",
+   "Sheet of Metal"
+  ]
+ }
+]
