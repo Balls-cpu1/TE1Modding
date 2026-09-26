@@ -531,6 +531,51 @@ def mode_auto(data_dir: Path, langs, chaos: int, interval: float, launch: bool):
     return True
 
 
+def mode_mark(data_dir: Path, langs):
+    """Диагностический режим: меняет имена предметов местами.
+
+    Обмен значениями Name ничего не стоит по размеру (тот же набор байтов,
+    просто переставлен), а в игре это видно сразу: если «Подушка» вдруг
+    называется как другой предмет - файл читается, значит, и рандомайзер
+    работает. Если имена прежние - игра этот файл не читает.
+    """
+    say("\n=== МЕТКА: обмен именами предметов ===")
+    if not writable(data_dir):
+        say_no_access(data_dir / "items_*.dat")
+        return False
+    for lang in langs:
+        text, enc, size = get_original(data_dir, lang)
+        if text is None:
+            continue
+        items, order = parse_items(text)
+        named = [i for i in order if (items[i].get("Name") or "").strip()]
+        if len(named) < 2:
+            say(f"  ! items_{lang}.dat: слишком мало имён")
+            continue
+        pairs = list(zip(named[0::2], named[1::2]))[:6]
+        for a, b in pairs:
+            items[a]["Name"], items[b]["Name"] = items[b]["Name"], items[a]["Name"]
+        nl = "\r\n" if "\r\n" in text else "\n"
+        data = build_text(text.split("[", 1)[0], items, order, nl).encode(enc, "replace")
+        if len(data) != size:
+            say(f"  ! items_{lang}.dat: размер сбился ({len(data)} != {size}) - пропускаю")
+            continue
+        try:
+            atomic_write(data_dir / f"items_{lang}.dat", data)
+        except OSError:
+            say_no_access(data_dir / f"items_{lang}.dat")
+            continue
+        say(f"  items_{lang}.dat: обменено {len(pairs)} пар имён, размер {size} не изменился")
+        for a, b in pairs:
+            say(f"     [{a}] <-> [{b}]")
+    say("")
+    say("  Теперь зайди в игру и посмотри на названия предметов.")
+    say("  Если они перепутаны - файл читается, рандомайзер работает.")
+    say("  Если названия обычные - игра этот файл НЕ читает.")
+    say("  Вернуть имена: py te1_randomizer.py --restore")
+    return True
+
+
 def mode_diag(data_dir: Path):
     """Печатает состояние папки Data - чтобы понять, почему ничего не меняется."""
     say("\n=== Диагностика ===")
@@ -643,6 +688,14 @@ def main(argv=None):
         mode_diag(data)
         input("\n[Enter] - выход...")
         return 0
+
+    if "--mark" in argv:
+        langs = choose_langs(data, langs, argv)
+        if not langs:
+            return 1
+        ok = mode_mark(data, langs)
+        input("\n[Enter] - выход...")
+        return 0 if ok else 1
 
     langs = choose_langs(data, langs, argv)
     if not langs:
