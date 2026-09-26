@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
+r"""
 te1_randomizer.py - randomizer predmetov dlya The Escapists 1 (PC / Steam).
 
 Odin fail, bez zavisimostej krome Python 3.
