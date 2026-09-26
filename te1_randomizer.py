@@ -359,7 +359,12 @@ def writable(data_dir: Path) -> bool:
 
 
 def get_original(data_dir: Path, lang: str):
-    """Оригинальный текст items_<lang>.dat (из .bak, если он есть)."""
+    """Оригинальный текст items_<lang>.dat (из .bak, если он есть).
+
+    Обязательно проверяем, что decode->encode даёт те же байты: например,
+    в cp1251 байт 0x98 не определён и через errors='replace' молча
+    превратился бы в '?', испортив файл при сохранении того же размера.
+    """
     f = data_dir / f"items_{lang}.dat"
     bak = data_dir / f"items_{lang}.dat.bak"
     src = bak if bak.exists() else f
@@ -370,9 +375,15 @@ def get_original(data_dir: Path, lang: str):
         return None, None, 0
     plain, enc = detect_plain(raw)
     if not plain:
-        say("  ! файл зашифрован (Blowfish) - этот скрипт работает только")
-        say("    с открытыми .dat. Возьми te1_mod.py, он умеет расшифровывать.")
+        say(f"  ! items_{lang}.dat зашифрован - этот скрипт такие не правит")
         return None, None, 0
+
+    text = raw.decode(enc, "replace")
+    if text.encode(enc, "replace") != raw:
+        say(f"  ! items_{lang}.dat: не удалось разобрать без потерь ({enc}) -")
+        say("    пропускаю, иначе файл бы повредился. Пришли мне этот файл.")
+        return None, None, 0
+
     if not bak.exists():
         try:
             shutil.copy2(f, bak)
@@ -380,7 +391,7 @@ def get_original(data_dir: Path, lang: str):
             say_no_access(bak)
             return None, None, 0
         say(f"  бэкап создан: {bak.name}")
-    return raw.decode(enc, "replace"), enc, src.stat().st_size
+    return text, enc, src.stat().st_size
 
 
 def pick_languages(data_dir: Path):
@@ -579,6 +590,28 @@ def do_restore(data_dir: Path):
 
 
 # ------------------------------------------------------------------ main
+def choose_langs(data_dir: Path, langs, argv):
+    """Какие языки править. По умолчанию только русский: игра читает один
+    файл, а переписывать все семь - лишний риск испортить чужие переводы."""
+    if "--all-langs" in argv:
+        return langs
+    default = "rus" if "rus" in langs else langs[0]
+    s = ask(f"Язык(и) для правки, через пробел (или 'all') [{default}]")
+    if not s.strip():
+        return [default]
+    if s.strip().lower() == "all":
+        return langs
+    picked, bad = [], []
+    for tok in s.replace(",", " ").split():
+        tok = tok.strip().lower()
+        (picked if tok in langs else bad).append(tok)
+    if bad:
+        say(f"  ! в Data нет таких языков: {', '.join(bad)}")
+        say(f"    доступны: {', '.join(langs)}")
+    picked = [l for l in langs if l in picked]      # порядок как в Data
+    return picked or [default]
+
+
 def main(argv=None):
     argv = list(argv if argv is not None else sys.argv[1:])
     say("\n" + "=" * 60)
@@ -604,12 +637,17 @@ def main(argv=None):
     if not langs:
         say("  ! в Data нет items_*.dat")
         return 1
-    say(f"  Языки в Data: {', '.join(langs)}  (правим все)")
+    say(f"  Языки в Data: {', '.join(langs)}")
 
     if "--diag" in argv:
         mode_diag(data)
         input("\n[Enter] - выход...")
         return 0
+
+    langs = choose_langs(data, langs, argv)
+    if not langs:
+        return 1
+    say(f"  Правим: {', '.join('items_' + l + '.dat' for l in langs)}")
 
     auto = "--auto" in argv
     chaos = ask("Уровень хаоса 1-4 (1=мягко, 4=полный)", "2")
