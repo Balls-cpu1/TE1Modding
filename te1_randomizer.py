@@ -383,61 +383,85 @@ def get_original(data_dir: Path, lang: str):
     return raw.decode(enc, "replace"), enc, src.stat().st_size
 
 
-def pick_language(data_dir: Path):
-    langs = [f.stem.split("_")[1] for f in data_dir.glob("items_*.dat")
-             if len(f.stem.split("_")) == 2 and len(f.stem.split("_")[1]) == 3]
-    if not langs:
-        return None
-    return "rus" if "rus" in langs else langs[0]
+def pick_languages(data_dir: Path):
+    """Все языки, для которых есть items_<язык>.dat.
+
+    Игра подставляет язык из глобальной переменной gv[6], которая задаётся
+    в рантайме, - по exe нельзя сказать, какой именно файл она прочитает.
+    Поэтому правим сразу все: какой бы ни читался, он будет рандомизирован.
+    """
+    langs = []
+    for f in sorted(data_dir.glob("items_*.dat")):
+        parts = f.stem.split("_")
+        if len(parts) == 2 and len(parts[1]) == 3:
+            langs.append(parts[1])
+    return langs
 
 
 # ------------------------------------------------------------------ режимы
-def mode_once(data_dir: Path, lang: str, chaos: int, seed):
-    say(f"\n=== Разовая рандомизация: items_{lang}.dat ===")
+def mode_once(data_dir: Path, langs, chaos: int, seed):
+    say("\n=== Разовая рандомизация ===")
     if not writable(data_dir):
-        say_no_access(data_dir / f"items_{lang}.dat")
+        say_no_access(data_dir / "items_*.dat")
         return False
-    text, enc, size = get_original(data_dir, lang)
-    if text is None:
-        return False
-    say(f"  предметов в файле: {len(parse_items(text)[1])}, кодировка {enc}")
 
-    data, touched, log = make_version(text, seed, chaos, enc, size)
-    if data is None:
-        say("  ! случайная версия длиннее оригинала - уменьши уровень хаоса")
+    prepared = []
+    for lang in langs:
+        text, enc, size = get_original(data_dir, lang)
+        if text is None:
+            continue
+        data, touched, log = make_version(text, seed, chaos, enc, size)
+        if data is None:
+            say(f"  ! items_{lang}.dat: версия не влезла в размер - снизь хаос")
+            continue
+        prepared.append((lang, data, size, touched, log))
+        say(f"  items_{lang}.dat: {len(parse_items(text)[1])} предметов, "
+            f"изменено {touched}, {size} байт, {enc}")
+
+    if not prepared:
+        say("  ! нечего применять")
         return False
-    say(f"  изменено предметов: {touched}, сид {seed}")
-    say("  примеры:")
-    say("\n".join(log))
-    if touched > len(log):
-        say(f"    ... и ещё {touched - len(log)}")
+
+    say(f"\n  примеры (сид {seed}):")
+    say("\n".join(prepared[0][4][:14]))
     if ask("\nПрименить? (y/n)", "n").lower() != "y":
         say("  отменено")
         return True
 
-    try:
-        atomic_write(data_dir / f"items_{lang}.dat", data)
-    except OSError:
-        say_no_access(data_dir / f"items_{lang}.dat")
-        return False
-    say(f"  записано, размер не изменился: {size} байт")
+    ok = True
+    for lang, data, size, touched, _ in prepared:
+        try:
+            atomic_write(data_dir / f"items_{lang}.dat", data)
+            say(f"  записан items_{lang}.dat ({touched} предметов, размер {size} не изменился)")
+        except OSError:
+            say_no_access(data_dir / f"items_{lang}.dat")
+            ok = False
     say("  val.dat трогать не нужно (валидатор проверяет только размер)")
     say("\n  ВАЖНО: это разовая версия - при следующей загрузке карты")
     say("  предметы будут ТЕ ЖЕ. Для авто-режима: py te1_randomizer.py --auto")
-    return True
+    return ok
 
 
-def mode_auto(data_dir: Path, lang: str, chaos: int, interval: float, launch: bool):
-    say(f"\n=== АВТО-РЕЖИМ: рандомизация при каждой загрузке карты ===")
+def mode_auto(data_dir: Path, langs, chaos: int, interval: float, launch: bool):
+    say("\n=== АВТО-РЕЖИМ: рандомизация при каждой загрузке карты ===")
     if not writable(data_dir):
-        say_no_access(data_dir / f"items_{lang}.dat")
+        say_no_access(data_dir / "items_*.dat")
         return False
-    text, enc, size = get_original(data_dir, lang)
-    if text is None:
+
+    srcs = []
+    for lang in langs:
+        text, enc, size = get_original(data_dir, lang)
+        if text is None:
+            continue
+        srcs.append((lang, text, enc, size, data_dir / f"items_{lang}.dat"))
+        say(f"  items_{lang}.dat: {len(parse_items(text)[1])} предметов, "
+            f"{size} байт, {enc}")
+    if not srcs:
+        say("  ! ни один items_*.dat не подошёл - смотри сообщения выше")
         return False
-    n_items = len(parse_items(text)[1])
-    say(f"  файл: items_{lang}.dat ({n_items} предметов, {size} байт, {enc})")
-    say(f"  хаос {chaos}, обновление раз в {interval:g} сек")
+
+    say(f"  файлов в работе: {len(srcs)}, хаос {chaos}, "
+        f"обновление раз в {interval:g} сек")
     say("")
     say("  Как это работает:")
     say("    игра читает items_*.dat только при входе во фрейм `game`,")
@@ -456,31 +480,34 @@ def mode_auto(data_dir: Path, lang: str, chaos: int, interval: float, launch: bo
         except Exception as e:
             say(f"  ! не смог запустить: {e}")
 
-    target = data_dir / f"items_{lang}.dat"
     rnd = random.Random()
     count = 0
     last_err = ""
     try:
         while True:
             seed = rnd.randrange(1, 2 ** 31)
-            data, touched, _ = make_version(text, seed, chaos, enc, size)
-            if data is None:
-                say("  ! версия не влезла в исходный размер - снизь хаос")
-                break
-            try:
-                atomic_write(target, data)
+            done, touched = 0, 0
+            for lang, text, enc, size, target in srcs:
+                data, n, _ = make_version(text, seed, chaos, enc, size)
+                if data is None:
+                    continue
+                try:
+                    atomic_write(target, data)
+                    done += 1
+                    touched += n
+                except PermissionError:
+                    if last_err != "locked":
+                        say("\n  (файл занят игрой - подожду)")
+                        last_err = "locked"
+                except OSError as e:
+                    if str(e) != last_err:
+                        say(f"\n  ! {e}")
+                        last_err = str(e)
+            if done:
                 count += 1
                 last_err = ""
                 say(f"\r  [{time.strftime('%H:%M:%S')}] версия #{count} "
-                    f"(сид {seed}, {touched} предметов)   ", end="")
-            except PermissionError:
-                if last_err != "locked":
-                    say("\n  (файл занят игрой - подожду)")
-                    last_err = "locked"
-            except OSError as e:
-                if str(e) != last_err:
-                    say(f"\n  ! {e}")
-                    last_err = str(e)
+                    f"(сид {seed}, файлов {done}, предметов {touched})   ", end="")
             time.sleep(interval)
     except KeyboardInterrupt:
         say("\n\n  остановлено")
@@ -491,6 +518,44 @@ def mode_auto(data_dir: Path, lang: str, chaos: int, interval: float, launch: bo
         if want:
             do_restore(data_dir)
     return True
+
+
+def mode_diag(data_dir: Path):
+    """Печатает состояние папки Data - чтобы понять, почему ничего не меняется."""
+    say("\n=== Диагностика ===")
+    say(f"  папка: {data_dir}")
+    say(f"  доступна для записи: {writable(data_dir)}")
+    exe = data_dir.parent / "TheEscapists.exe"
+    say(f"  TheEscapists.exe рядом: {exe.exists()}")
+    say("")
+    found = sorted(data_dir.glob("items_*.dat"))
+    if not found:
+        say("  ! в этой папке нет items_*.dat - значит, папка игры найдена неверно")
+        return
+    for f in found:
+        raw = f.read_bytes()
+        plain, enc = detect_plain(raw)
+        bak = f.with_name(f.name + ".bak")
+        if plain:
+            n = len(parse_items(raw.decode(enc, "replace"))[1])
+            kind = f"открытый текст, {enc}, предметов {n}"
+        else:
+            kind = "ЗАШИФРОВАН (этот скрипт такие не правит)"
+        same = ""
+        if bak.exists():
+            same = " | СЕЙЧАС ИЗМЕНЁН" if bak.read_bytes() != raw else " | = оригиналу"
+        say(f"  {f.name:22} {len(raw):7} байт | {kind}")
+        say(f"  {'':22} бэкап: {'есть' if bak.exists() else 'нет'}{same}")
+    say("")
+    v = data_dir / "val.dat"
+    if v.exists():
+        say(f"  val.dat: {v.stat().st_size} байт")
+        for f in found:
+            h = md5_size(f.stat().st_size)
+            ok = h in v.read_bytes().decode("utf-16-le", "replace")
+            say(f"    хеш размера {f.name}: {'совпадает' if ok else 'НЕ СОВПАДАЕТ'}")
+    else:
+        say("  val.dat: нет")
 
 
 def do_restore(data_dir: Path):
@@ -535,11 +600,16 @@ def main(argv=None):
         input("\n[Enter] - выход...")
         return 0
 
-    lang = pick_language(data)
-    if not lang:
+    langs = pick_languages(data)
+    if not langs:
         say("  ! в Data нет items_*.dat")
         return 1
-    say(f"  Язык: {lang}")
+    say(f"  Языки в Data: {', '.join(langs)}  (правим все)")
+
+    if "--diag" in argv:
+        mode_diag(data)
+        input("\n[Enter] - выход...")
+        return 0
 
     auto = "--auto" in argv
     chaos = ask("Уровень хаоса 1-4 (1=мягко, 4=полный)", "2")
@@ -555,11 +625,11 @@ def main(argv=None):
         except ValueError:
             iv = 2.0
         lc = ask("Запустить игру сейчас? (y/n)", "y").lower() == "y"
-        return 0 if mode_auto(data, lang, chaos, iv, lc) else 1
+        return 0 if mode_auto(data, langs, chaos, iv, lc) else 1
 
     s = ask("Сид (число = повторяемо, пусто = случайный)")
     seed = int(s) if s.lstrip("-").isdigit() else random.randrange(1, 2 ** 31)
-    ok = mode_once(data, lang, chaos, seed)
+    ok = mode_once(data, langs, chaos, seed)
     if ok:
         say("\n  Хочешь, чтобы рандомизация была при КАЖДОЙ загрузке карты?")
         say("  Тогда: py te1_randomizer.py --auto")
