@@ -33,6 +33,7 @@ popast' na napologvinu zapisanij fail.
 """
 from __future__ import annotations
 
+import collections
 import hashlib
 import os
 import random
@@ -222,6 +223,12 @@ def _block_len(iid, props, enc, nl):
     return len(s.encode(enc, "replace"))
 
 
+# Поля, значения которых переставляются между предметами (не выдумываются
+# заново, а берутся из уже имеющихся в файле - так нельзя получить
+# несуществующее значение). Craft не трогаем: это текст рецепта.
+SHUFFLE_FIELDS = ("Found", "Outfit", "Desk", "NPC_carry", "NPC_Carry",
+                  "Carry", "CamDis")
+
 # Из алфавита исключены = [ ] ; и переводы строк: они ломают разбор INI.
 NAME_CHARS = ("абвгдежзийклмнопрстуфхцчшщъыьэюя"
               "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
@@ -298,6 +305,7 @@ def make_version(orig_text: str, seed, chaos: int, enc: str, target_size: int,
     # Каждая замена подбирается ровно в ту же байтовую длину, поэтому
     # размер файла не меняется и бюджет фаз 1-2 остаётся нетронутым.
     if scramble:
+        snapshot = {i: dict(items[i]) for i in order}
         for iid in order:
             it = items[iid]
             if (it.get("Name") or "").strip().lower() in ("", "empty", "none"):
@@ -309,6 +317,26 @@ def make_version(orig_text: str, seed, chaos: int, enc: str, target_size: int,
                 new = random_text(len(old.encode(enc, "replace")), enc, rnd)
                 if new:
                     it[key] = new
+
+        # значения Found/Outfit/Desk/... переставляются между предметами:
+        # берутся только из уже встречающихся в файле, поэтому
+        # несуществующего значения получиться не может
+        for key in SHUFFLE_FIELDS:
+            holders = [i for i in order if key in items[i]]
+            if len(holders) < 2:
+                continue
+            vals = [items[i][key] for i in holders]
+            rnd.shuffle(vals)
+            for i, v in zip(holders, vals):
+                items[i][key] = v
+
+        # перестановка значений меняет длину строк, поэтому бюджет надо
+        # пересчитать; если уже не влезаем - откатываем всю фазу 0
+        used = len(build_text(header, items, order, nl).encode(enc, "replace"))
+        if used > target_size:
+            for i in order:
+                items[i] = snapshot[i]
+            used = len(base.encode(enc, "replace"))
 
     # --- фаза 1: перетасовать значения УЖЕ СУЩЕСТВУЮЩИХ полей.
     # Новых строк не появляется, поэтому размер почти не растёт и правки
@@ -679,6 +707,64 @@ def mode_mark(data_dir: Path, langs):
     return True
 
 
+def mode_diff(data_dir: Path, langs):
+    """Показывает, что именно изменилось относительно оригинала (.bak)."""
+    say("\n=== ЧТО ИЗМЕНИЛОСЬ ===")
+    STAT = list(STAT_POOLS)
+    for lang in langs:
+        f = data_dir / f"items_{lang}.dat"
+        bak = data_dir / f"items_{lang}.dat.bak"
+        if not f.exists():
+            continue
+        if not bak.exists():
+            say(f"  items_{lang}.dat: бэкапа нет - сравнивать не с чем")
+            continue
+        raw, bakraw = f.read_bytes(), bak.read_bytes()
+        if raw == bakraw:
+            say(f"  items_{lang}.dat: НЕ изменён (совпадает с оригиналом)")
+            continue
+        _, enc = detect_plain(bakraw)
+        enc = enc or "utf-8"
+        i0, o0 = parse_items(bakraw.decode(enc, "replace"))
+        i1, _ = parse_items(raw.decode(enc, "replace"))
+        n_name = n_info = n_stat = n_shuf = 0
+        stat_hits, shuf_hits = collections.Counter(), collections.Counter()
+        for iid in o0:
+            a, b = i0.get(iid, {}), i1.get(iid, {})
+            if a.get("Name") != b.get("Name"):
+                n_name += 1
+            if a.get("Info") != b.get("Info"):
+                n_info += 1
+            for k in STAT:
+                if a.get(k) != b.get(k):
+                    n_stat += 1
+                    stat_hits[k] += 1
+            for k in SHUFFLE_FIELDS:
+                if a.get(k) != b.get(k):
+                    n_shuf += 1
+                    shuf_hits[k] += 1
+        say(f"\n  items_{lang}.dat ({len(o0)} предметов):")
+        say(f"    переименовано предметов : {n_name}")
+        say(f"    изменено описаний Info  : {n_info}")
+        say(f"    изменено значений статов: {n_stat}")
+        for k, c in stat_hits.most_common():
+            say(f"        {k:12} {c}")
+        say(f"    переставлено Found/Outfit/Desk/... : {n_shuf}")
+        for k, c in shuf_hits.most_common():
+            say(f"        {k:12} {c}")
+        ex = [i for i in o0 if i0[i].get("Name") != i1.get(i, {}).get("Name")][:5]
+        if ex:
+            say("    примеры:")
+            for i in ex:
+                say(f"      [{i}] {(i0[i].get('Name') or '?').strip()[:26]:26} "
+                    f"-> {(i1[i].get('Name') or '?').strip()[:20]}")
+                d = [f"{k}:{i0[i].get(k)}->{i1[i].get(k)}"
+                     for k in STAT + list(SHUFFLE_FIELDS)
+                     if i0[i].get(k) != i1.get(i, {}).get(k)]
+                if d:
+                    say(f"           статы: {', '.join(d[:8])}")
+
+
 def mode_diag(data_dir: Path):
     """Печатает состояние папки Data - чтобы понять, почему ничего не меняется."""
     say("\n=== Диагностика ===")
@@ -798,6 +884,11 @@ def main(argv=None):
         if not ok:
             pause()   # при ошибке окно не закрываем
         return 0 if ok else 1
+
+    if "--diff" in argv:
+        mode_diff(data, ["rus"] if "rus" in langs else langs)
+        pause()
+        return 0
 
     if "--diag" in argv:
         mode_diag(data)
