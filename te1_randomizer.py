@@ -267,60 +267,57 @@ def make_version(orig_text: str, seed, chaos: int, enc: str, target_size: int,
                  scramble: bool = False):
     """Случайная версия файла, подогнанная РОВНО под target_size байт.
 
-    Размер обязан остаться прежним: тогда val.dat трогать не нужно и
-    валидатор игры не ругается. Предметы берутся в случайном порядке и
-    правятся один за другим, пока хватает байтового бюджета; удаление
-    поля (стат = 0) бюджет освобождает.
+    Размер обязан остаться прежним: валидатор val.dat проверяет именно его.
+    Свободных байт в файле нет, поэтому место под новые поля (без них
+    предмет не получит новую способность) берётся из Info: его текст всё
+    равно заменяется на случайный, так что укоротить его не жалко.
     Возвращает (bytes, изменено_предметов, лог) или (None, 0, []).
     """
     nl = "\r\n" if "\r\n" in orig_text else "\n"
     nlb = nl.encode(enc)
+    step = 2 if enc in ("utf-16-le", "utf-16-be") else 1
     header = orig_text.split("[", 1)[0]
     items, order = parse_items(orig_text)
-    base = build_text(header, items, order, nl)
-    used = len(base.encode(enc, "replace"))
-    if used > target_size:
-        return None, 0, []
-
     rnd = random.Random(seed)
     keys = list(STAT_POOLS)
-    log, touched = [], 0
-    changed = set()
+    usable = [i for i in order
+              if (items[i].get("Name") or "").strip().lower() not in ("", "empty", "none")]
 
-    def note(iid, it, bk):
-        nonlocal touched
-        diff = [f"{k}={it.get(k) or 0}" for k in keys if it.get(k) != bk[k]]
-        if diff:
-            touched += 1
-            changed.add(iid)
-            if len(log) < 18:
-                log.append(f"    [{iid:>3}] {(it.get('Name') or '?').strip()[:30]:30} "
-                           + ", ".join(diff))
-        return bool(diff)
-
-    def usable(iid):
-        return (items[iid].get("Name") or "").strip().lower() not in ("", "empty", "none")
-
-    # --- фаза 0 (по желанию): названия и описания в случайный набор знаков.
-    # Каждая замена подбирается ровно в ту же байтовую длину, поэтому
-    # размер файла не меняется и бюджет фаз 1-2 остаётся нетронутым.
+    # --- названия в случайный набор знаков, ровно в ту же байтовую длину
     if scramble:
-        snapshot = {i: dict(items[i]) for i in order}
-        for iid in order:
-            it = items[iid]
-            if (it.get("Name") or "").strip().lower() in ("", "empty", "none"):
-                continue                      # пустые слоты не трогаем
-            for key in ("Name", "Info"):
-                if key not in it:
-                    continue
-                old = it[key]
+        for iid in usable:
+            old = items[iid].get("Name")
+            if old:
                 new = random_text(len(old.encode(enc, "replace")), enc, rnd)
                 if new:
-                    it[key] = new
+                    items[iid]["Name"] = new
 
-        # значения Found/Outfit/Desk/... переставляются между предметами:
-        # берутся только из уже встречающихся в файле, поэтому
-        # несуществующего значения получиться не может
+    def size_of():
+        return len(build_text(header, items, order, nl).encode(enc, "replace"))
+
+    def assign(nfields):
+        """Раздать предметы по nfields случайных статов, включая новые поля."""
+        touched, log = 0, []
+        for iid in usable:
+            it = items[iid]
+            before = {k: it.get(k) for k in keys}
+            for k in keys:
+                it.pop(k, None)
+            for k in rnd.sample(keys, min(nfields, len(keys))):
+                v = rnd.choice(STAT_POOLS[k])
+                if v:
+                    it[k] = str(v)
+            if rnd.random() < 0.5:
+                it["Illegal"] = "1" if rnd.random() < 0.7 else "0"
+            diff = [f"{k}={it.get(k) or 0}" for k in keys if it.get(k) != before[k]]
+            if diff:
+                touched += 1
+                if len(log) < 18:
+                    log.append(f"    [{iid:>3}] {(it.get('Name') or '?').strip()[:26]:26} "
+                               + ", ".join(diff[:6]))
+        return touched, log
+
+    def shuffle_fields():
         for key in SHUFFLE_FIELDS:
             holders = [i for i in order if key in items[i]]
             if len(holders) < 2:
@@ -330,67 +327,50 @@ def make_version(orig_text: str, seed, chaos: int, enc: str, target_size: int,
             for i, v in zip(holders, vals):
                 items[i][key] = v
 
-        # перестановка значений меняет длину строк, поэтому бюджет надо
-        # пересчитать; если уже не влезаем - откатываем всю фазу 0
-        used = len(build_text(header, items, order, nl).encode(enc, "replace"))
-        if used > target_size:
-            for i in order:
-                items[i] = snapshot[i]
-            used = len(base.encode(enc, "replace"))
+    def squeeze_info(need: int) -> int:
+        """Укоротить Info на need байт; возвращает, сколько не хватило."""
+        for iid in order:
+            if need <= 0:
+                break
+            it = items[iid]
+            if "Info" not in it:
+                continue
+            cur = len(it["Info"].encode(enc, "replace"))
+            take = min(cur, need)
+            take -= take % step
+            if take <= 0:
+                continue
+            it["Info"] = random_text(cur - take, enc, rnd) or ""
+            need -= take
+        return max(0, need)
 
-    # --- фаза 1: перетасовать значения УЖЕ СУЩЕСТВУЮЩИХ полей.
-    # Новых строк не появляется, поэтому размер почти не растёт и правки
-    # достаются практически каждому предмету.
-    ph1 = order[:]
-    rnd.shuffle(ph1)
-    for iid in ph1:
-        it = items[iid]
-        if not usable(iid):
-            continue
-        present = [k for k in keys if k in it]
-        if not present:
-            continue
-        before = dict(it)
-        bk = {k: it.get(k) for k in keys}
-        for k in rnd.sample(present, max(1, len(present) - rnd.randint(0, 1))):
-            v = rnd.choice(STAT_POOLS[k])
-            if v == 0:
-                it.pop(k, None)            # поле исчезает -> освобождает байты
-            else:
-                it[k] = str(v)
-        delta = _block_len(iid, it, enc, nl) - _block_len(iid, before, enc, nl)
-        if used + delta > target_size:
-            items[iid] = before
-            continue
-        used += delta
-        note(iid, it, bk)
+    # --- подбираем число статов так, чтобы влезло даже при пустых Info
+    orig_items = {i: dict(items[i]) for i in order}
+    touched, log = 0, []
+    for nfields in range(2 + chaos, 0, -1):
+        for i in order:
+            items[i] = dict(orig_items[i])
+        touched, log = assign(nfields)
+        shuffle_fields()
+        if size_of() - sum(len(items[i].get("Info", "").encode(enc, "replace"))
+                           for i in order) <= target_size:
+            break
+    else:
+        return None, 0, []
 
-    # --- фаза 2: на оставшийся бюджет раздаём предметы новыми полями
-    ph2 = [i for i in order if i not in changed]
-    rnd.shuffle(ph2)
-    for iid in ph2:
-        it = items[iid]
-        if not usable(iid):
-            continue
-        before = dict(it)
-        bk = {k: it.get(k) for k in keys}
-        n = min(rnd.randint(1, 2 + chaos), len(keys))
-        for k in rnd.sample(keys, n):
-            v = rnd.choice(STAT_POOLS[k])
-            if v == 0:
-                it.pop(k, None)
-            else:
-                it[k] = str(v)
-        if chaos >= 2 and rnd.random() < 0.4:
-            it["Illegal"] = "1" if rnd.random() < 0.5 else "0"
-        delta = _block_len(iid, it, enc, nl) - _block_len(iid, before, enc, nl)
-        if used + delta > target_size:
-            items[iid] = before
-            continue
-        used += delta
-        note(iid, it, bk)
+    # --- теперь доводим размер до точного: Info в случайный текст нужной длины
+    for iid in order:
+        if "Info" in items[iid]:
+            old = items[iid]["Info"]
+            new = random_text(len(old.encode(enc, "replace")), enc, rnd)
+            if new:
+                items[iid]["Info"] = new
 
     data = build_text(header, items, order, nl).encode(enc, "replace")
+    if len(data) > target_size:
+        if squeeze_info(len(data) - target_size):
+            return None, 0, []
+        data = build_text(header, items, order, nl).encode(enc, "replace")
     if len(data) > target_size:
         return None, 0, []
     reps, rem = divmod(target_size - len(data), len(nlb))
