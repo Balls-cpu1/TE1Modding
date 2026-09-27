@@ -87,8 +87,19 @@ def say(*a, end="\n"):
 
 
 def ask(prompt, default=None):
-    s = input(prompt + (f" [{default}]: " if default is not None else ": ")).strip()
+    try:
+        s = input(prompt + (f" [{default}]: " if default is not None else ": ")).strip()
+    except (EOFError, OSError):
+        s = ""                                # ввод закрыт - берём значение по умолчанию
     return s or (default if default is not None else "")
+
+
+def pause():
+    """Ждём Enter, но не падаем, если ввод уже закрыт."""
+    try:
+        input("\n[Enter] - выход...")
+    except (EOFError, OSError):
+        pass
 
 
 # ------------------------------------------------------------------ кодировки
@@ -211,7 +222,42 @@ def _block_len(iid, props, enc, nl):
     return len(s.encode(enc, "replace"))
 
 
-def make_version(orig_text: str, seed, chaos: int, enc: str, target_size: int):
+# Из алфавита исключены = [ ] ; и переводы строк: они ломают разбор INI.
+NAME_CHARS = ("абвгдежзийклмнопрстуфхцчшщъыьэюя"
+              "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
+              "abcdefghijklmnopqrstuvwxyz0123456789%.,!?@#$&*+-~^_")
+
+
+def random_text(target_bytes: int, enc: str, rnd: random.Random):
+    """Случайная строка РОВНО в target_bytes байт в кодировке enc.
+
+    Размер обязан совпасть точно, иначе съедет размер всего файла и
+    валидатор val.dat не пустит игру. В utf-16 любой символ стоит 2 байта,
+    в utf-8/cp1251 кириллица дороже латиницы - поэтому символы набираются
+    по одному с контролем оставшегося бюджета.
+    """
+    if target_bytes <= 0:
+        return None
+    out, left = [], target_bytes
+    for _ in range(target_bytes + 8):
+        if left <= 0:
+            break
+        c = rnd.choice(NAME_CHARS)
+        n = len(c.encode(enc, "replace"))
+        if n > left:
+            c, n = ".", 1                     # точка - 1 байт в utf-8/cp1251
+            if len(c.encode(enc, "replace")) > left:
+                continue
+            n = len(c.encode(enc, "replace"))
+        out.append(c)
+        left -= n
+    if left != 0:
+        return None
+    return "".join(out)
+
+
+def make_version(orig_text: str, seed, chaos: int, enc: str, target_size: int,
+                 scramble: bool = False):
     """Случайная версия файла, подогнанная РОВНО под target_size байт.
 
     Размер обязан остаться прежним: тогда val.dat трогать не нужно и
@@ -247,6 +293,22 @@ def make_version(orig_text: str, seed, chaos: int, enc: str, target_size: int):
 
     def usable(iid):
         return (items[iid].get("Name") or "").strip().lower() not in ("", "empty", "none")
+
+    # --- фаза 0 (по желанию): названия и описания в случайный набор знаков.
+    # Каждая замена подбирается ровно в ту же байтовую длину, поэтому
+    # размер файла не меняется и бюджет фаз 1-2 остаётся нетронутым.
+    if scramble:
+        for iid in order:
+            it = items[iid]
+            if (it.get("Name") or "").strip().lower() in ("", "empty", "none"):
+                continue                      # пустые слоты не трогаем
+            for key in ("Name", "Info"):
+                if key not in it:
+                    continue
+                old = it[key]
+                new = random_text(len(old.encode(enc, "replace")), enc, rnd)
+                if new:
+                    it[key] = new
 
     # --- фаза 1: перетасовать значения УЖЕ СУЩЕСТВУЮЩИХ полей.
     # Новых строк не появляется, поэтому размер почти не растёт и правки
@@ -453,6 +515,47 @@ def mode_once(data_dir: Path, langs, chaos: int, seed):
     return ok
 
 
+def mode_quick(data_dir: Path, langs):
+    """Один запуск = одна полная рандомизация. Без вопросов, без ожидания.
+
+    Именно это вызывает randomize.bat: открыл - перетасовалось - закрылось.
+    Чтобы в следующий раз получить другой набор, запусти ещё раз.
+    """
+    say("\n=== БЫСТРАЯ РАНДОМИЗАЦИЯ (всё подряд, включая названия) ===")
+    if not writable(data_dir):
+        say_no_access(data_dir / "items_*.dat")
+        return False
+
+    seed = random.randrange(1, 2 ** 31)
+    total, done = 0, 0
+    for lang in langs:
+        text, enc, size = get_original(data_dir, lang)
+        if text is None:
+            continue
+        data, touched, log = make_version(text, seed, 4, enc, size, scramble=True)
+        if data is None:
+            say(f"  ! items_{lang}.dat: не удалось уложить в размер - пропущен")
+            continue
+        try:
+            atomic_write(data_dir / f"items_{lang}.dat", data)
+        except OSError:
+            say_no_access(data_dir / f"items_{lang}.dat")
+            continue
+        done += 1
+        total += touched
+        say(f"  items_{lang}.dat: перетасовано {touched} предметов, размер {size} не изменился")
+        for line in log[:6]:
+            say(line)
+
+    if not done:
+        say("  ! ни один файл не записан")
+        return False
+    say(f"\n  готово: файлов {done}, предметов {total}, сид {seed}")
+    say("  в игре зайди на карту заново - статы подхватятся при загрузке")
+    say("  ещё раз = новый набор. Вернуть оригинал: restore.bat")
+    return True
+
+
 def mode_auto(data_dir: Path, langs, chaos: int, interval: float, launch: bool):
     say("\n=== АВТО-РЕЖИМ: рандомизация при каждой загрузке карты ===")
     if not writable(data_dir):
@@ -614,9 +717,9 @@ def mode_diag(data_dir: Path):
         say("  val.dat: нет")
 
 
-def do_restore(data_dir: Path):
+def do_restore(data_dir: Path) -> bool:
     say("\n=== Откат ===")
-    n = 0
+    n, failed = 0, 0
     for bak in sorted(data_dir.glob("*.dat.bak")):
         target = data_dir / bak.name[:-4]
         try:
@@ -624,14 +727,16 @@ def do_restore(data_dir: Path):
         except OSError as e:
             say(f"  ! не смог восстановить {target.name}: {e}")
             say_no_access(target)
+            failed += 1
             continue
         say(f"  восстановлен {target.name}")
         n += 1
     if n == 0:
         say("  бэкапов (.bak) не найдено")
-        return
+        return failed == 0
     rebuild_val(data_dir)
     say(f"  готово, восстановлено: {n}")
+    return failed == 0
 
 
 # ------------------------------------------------------------------ main
@@ -674,9 +779,10 @@ def main(argv=None):
     data = gd / "Data"
 
     if "--restore" in argv:
-        do_restore(data)
-        input("\n[Enter] - выход...")
-        return 0
+        ok = do_restore(data)
+        if not ok:
+            pause()   # при ошибке окно не закрываем
+        return 0 if ok else 1
 
     langs = pick_languages(data)
     if not langs:
@@ -684,9 +790,18 @@ def main(argv=None):
         return 1
     say(f"  Языки в Data: {', '.join(langs)}")
 
+    if "--quick" in argv:
+        # без вопросов: русский, если он есть, иначе все найденные языки
+        quick = ["rus"] if "rus" in langs else langs
+        say(f"  Правим: {', '.join('items_' + l + '.dat' for l in quick)}")
+        ok = mode_quick(data, quick)
+        if not ok:
+            pause()   # при ошибке окно не закрываем
+        return 0 if ok else 1
+
     if "--diag" in argv:
         mode_diag(data)
-        input("\n[Enter] - выход...")
+        pause()
         return 0
 
     if "--mark" in argv:
@@ -694,7 +809,7 @@ def main(argv=None):
         if not langs:
             return 1
         ok = mode_mark(data, langs)
-        input("\n[Enter] - выход...")
+        pause()
         return 0 if ok else 1
 
     langs = choose_langs(data, langs, argv)
@@ -724,7 +839,7 @@ def main(argv=None):
     if ok:
         say("\n  Хочешь, чтобы рандомизация была при КАЖДОЙ загрузке карты?")
         say("  Тогда: py te1_randomizer.py --auto")
-    input("\n[Enter] - выход...")
+    pause()
     return 0 if ok else 1
 
 
