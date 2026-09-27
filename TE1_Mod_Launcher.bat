@@ -161,9 +161,14 @@ rem ----------------------------------------------------------------------
 #   --restore         put the original Data\*.dat files back and exit
 #   --status          print what is installed and exit
 #   --report          dry run of "Better Translate", print the diff, exit
+#   --handover SEC    wait this long for the real game to appear after the
+#                     front-end closed (default 8)
+#   --exit-grace SEC  wait this long after the game closed before cleaning
+#                     up (default 2)
 #
 from __future__ import annotations
 
+import csv
 import hashlib
 import json
 import os
@@ -172,6 +177,7 @@ import re
 import shutil
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 ENGINE_VERSION = "1.0"
@@ -910,6 +916,79 @@ def sync_prefix(value, eng):
     return me.group(1) + "@" + body
 
 
+# ---------------------------------------------------------- watching the game
+# Delays, in seconds. See Launcher.wait_for_game() for what they mean.
+HANDOVER = 8.0     # launcher closed, waiting for the real game to appear
+EXIT_GRACE = 2.0   # the real game closed - make sure it is really gone
+POLL_IDLE = 1.5    # how often to look while the game is running
+POLL_BUSY = 0.4    # how often to look while a delay is counting down
+
+# TheEscapists.exe (2.4 MB) is a front end; the real game is
+# TheEscapists_rus.exe / _eur.exe / _pol.exe (8 MB each). Anything that is
+# game sized or carries the game's name counts, installers never do.
+IS_WINDOWS = (os.name == "nt")
+GAME_EXE_MIN_SIZE = 1024 * 1024
+NON_GAME_EXE = re.compile(r"^(unins|uninst|setup|vcredist|dxsetup|dotnet|"
+                          r"redist|install|crash|report|steam)", re.I)
+# Always watched, even when the file is not in the folder we scanned.
+KNOWN_GAME_EXES = ("theescapists.exe", "theescapists_rus.exe",
+                   "theescapists_eur.exe", "theescapists_pol.exe",
+                   "theescapists_ger.exe", "theescapists_fre.exe",
+                   "theescapists_spa.exe", "theescapists_ita.exe")
+
+
+def game_exe_names(game_dir):
+    """Lower-case image names of everything in the folder that is a game."""
+    names = set()
+    try:
+        root = Path(game_dir)
+        for f in list(root.glob("*.exe")) + list(root.glob("*/*.exe")):
+            if NON_GAME_EXE.match(f.name):
+                continue
+            if (f.name.lower().startswith("theescapists")
+                    or f.stat().st_size >= GAME_EXE_MIN_SIZE):
+                names.add(f.name.lower())
+    except OSError:
+        pass
+    names.update(KNOWN_GAME_EXES)
+    return names
+
+
+def short_list(names, keep=3):
+    ordered = sorted(names)
+    head = ", ".join(ordered[:keep])
+    if len(ordered) > keep:
+        head += " (+%d more)" % (len(ordered) - keep)
+    return head
+
+
+def running_pids(names):
+    """PIDs of running processes whose image name is in `names`.
+
+    Windows only - everywhere else this returns nothing and the launcher
+    falls back to the plain delays.
+    """
+    if not names or not IS_WINDOWS:
+        return set()
+    try:
+        out = subprocess.run(["tasklist", "/FO", "CSV", "/NH"],
+                             stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+                             timeout=10)
+        text = out.stdout.decode("utf-8", "replace")
+    except Exception:
+        return set()
+    pids = set()
+    for row in csv.reader(text.splitlines()):
+        if len(row) < 2:
+            continue
+        if row[0].strip().lower() in names:
+            try:
+                pids.add(int(row[1].strip()))
+            except ValueError:
+                pass
+    return pids
+
+
 # ----------------------------------------------------------- Better Translate
 def translate_items(ini_rus, ini_eng, log):
     """items_rus.dat: names, descriptions and recipes."""
@@ -1118,6 +1197,8 @@ class Launcher(object):
         self.orig = self.mods / "original"
         self.state_path = self.mods / "mods.json"
         self.state = {"randomizer": False, "better_translate": False}
+        self.handover = HANDOVER
+        self.exit_grace = EXIT_GRACE
 
     # -- state ------------------------------------------------------------
     def load_state(self):
@@ -1232,6 +1313,7 @@ class Launcher(object):
             return False
         say("")
         say("  Starting %s ..." % EXE_NAME)
+        say("  Watching: %s" % short_list(game_exe_names(self.game)))
         say("  (this window stays open and puts your files back when you quit)")
         say("")
         try:
@@ -1240,10 +1322,57 @@ class Launcher(object):
             say("  ! could not start the game: %s" % e)
             return False
         try:
-            proc.wait()
+            self.wait_for_game(proc)
         except KeyboardInterrupt:
             pass
         return True
+
+    def wait_for_game(self, proc):
+        """Wait until the player is really done.
+
+        TheEscapists.exe is only a front end: it shows a "Play" button,
+        closes itself and starts the actual game (TheEscapists_rus.exe /
+        _eur.exe / _pol.exe, 8 MB each). Waiting on our own child is
+        therefore not enough - it would hand the files back while the
+        player is still looking at the menu.
+
+        So we watch every game executable in the folder. Two different
+        delays are used, because the two gaps are very different:
+
+          handover  - launcher closed, real game has not shown up yet
+          exit      - the game itself closed; make sure it is really gone
+
+        If a game process turns up during either delay the wait restarts.
+        """
+        names = game_exe_names(self.game)
+        child = proc.pid
+        game_seen = False
+        deadline = None
+        said_wait = False
+        while True:
+            others = running_pids(names) - {child}
+            if proc.poll() is None or others:
+                # something is still up: launcher, game, or both
+                if others and not game_seen:
+                    game_seen = True
+                    say("  The game is running.")
+                deadline = None
+                said_wait = False
+                time.sleep(POLL_IDLE)
+                continue
+            # nothing of ours is running any more
+            if deadline is None:
+                window = self.exit_grace if game_seen else self.handover
+                deadline = time.monotonic() + window
+            if time.monotonic() >= deadline:
+                if not game_seen:
+                    say("  The game never started - restoring your files.")
+                return
+            if not game_seen and not said_wait:
+                say("  Waiting for the game to start (%.0f seconds)..."
+                    % self.handover)
+                said_wait = True
+            time.sleep(POLL_BUSY)
 
 
 # ------------------------------------------------------------------- screens
@@ -1421,6 +1550,20 @@ def main(argv=None):
     launcher = Launcher(gd)
     launcher.mods.mkdir(parents=True, exist_ok=True)
     launcher.load_state()
+
+    def opt(name, default):
+        if name in argv:
+            i = argv.index(name)
+            if i + 1 < len(argv):
+                try:
+                    return float(argv[i + 1])
+                except ValueError:
+                    pass
+        return default
+
+    launcher.handover = opt("--handover", HANDOVER)
+    launcher.exit_grace = opt("--exit-grace", EXIT_GRACE)
+
     # Safety net: if the previous run was killed before it could clean up
     # (closed console, crash, power cut), put the game files back first.
     launcher.restore(quiet=True)

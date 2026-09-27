@@ -12,6 +12,8 @@ import json
 import os
 import subprocess
 import sys
+import threading
+import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -153,7 +155,159 @@ def main():
     diff = [n for n in before if before[n] != restored.get(n)]
     check("every .dat is byte-identical again", not diff, str(diff))
 
-    print("8. dry-run report on a clean tree")
+    print("8. the front-end hands the game over to another exe")
+    # TheEscapists.exe is only a launcher: it shows "Play", closes itself and
+    # starts TheEscapists_rus.exe. wait_for_game() has to survive that gap
+    # and must not hand the files back while the real game is running.
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location("te1_engine", str(ENGINE))
+    eng = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(eng)
+
+    class FakeProc(object):
+        def __init__(self):
+            self.pid = 4242
+            self.alive = True
+
+        def poll(self):
+            return None if self.alive else 0
+
+    def script(steps):
+        """steps: list of (seconds_from_start, set_of_game_pids)."""
+        t0 = [None]
+
+        def fake_running_pids(names):
+            now = time.monotonic()
+            if t0[0] is None:
+                t0[0] = now
+            pids = set()
+            for at, value in steps:
+                if now - t0[0] >= at:
+                    pids = value
+            return pids
+
+        return fake_running_pids
+
+    real_running_pids = eng.running_pids      # restored again in step 9
+
+    # a) launcher closes, real game appears 1.5 s later, runs 2 s, then quits
+    eng.POLL_IDLE = 0.2
+    eng.POLL_BUSY = 0.1
+    launcher = eng.Launcher(game)
+    launcher.handover = 8.0
+    launcher.exit_grace = 2.0
+    eng.running_pids = script([(0.0, set()), (1.5, {9001}), (3.5, set())])
+    proc = FakeProc()
+    proc.alive = False                # the front-end already closed
+    t = time.monotonic()
+    launcher.wait_for_game(proc)
+    elapsed = time.monotonic() - t
+    check("waited for the real game, not for the launcher",
+          4.5 <= elapsed <= 7.5, "elapsed %.1fs" % elapsed)
+
+    # b) the game never shows up at all -> give up after the handover delay
+    launcher.handover = 1.0
+    eng.running_pids = script([(0.0, set())])
+    proc = FakeProc()
+    proc.alive = False
+    t = time.monotonic()
+    launcher.wait_for_game(proc)
+    elapsed = time.monotonic() - t
+    check("gives up when the game never starts",
+          0.5 <= elapsed <= 2.5, "elapsed %.1fs" % elapsed)
+
+    # c) the launcher stays open the whole time -> we keep waiting on it
+    launcher.handover = 1.0
+    eng.running_pids = script([(0.0, set())])
+    proc = FakeProc()
+    proc.alive = True
+    threading.Timer(1.0, lambda: setattr(proc, "alive", False)).start()
+    t = time.monotonic()
+    launcher.wait_for_game(proc)
+    elapsed = time.monotonic() - t
+    check("waits while the front-end window is open",
+          1.5 <= elapsed <= 3.5, "elapsed %.1fs" % elapsed)
+
+    print("9. real tasklist parsing (fake tasklist on PATH)")
+    # Exercise the actual running_pids()/csv code path, not a stub.
+    fake_bin = WORK / "fakebin"
+    fake_bin.mkdir(exist_ok=True)
+    tasklist = fake_bin / "tasklist"
+    state = WORK / "tasklist.csv"
+    tasklist.write_text('#!/bin/sh\ncat "%s"\n' % state, encoding="ascii")
+    tasklist.chmod(0o755)
+    os.environ["PATH"] = str(fake_bin) + os.pathsep + os.environ["PATH"]
+
+    def write_procs(rows):
+        lines = []
+        for image, pid in rows:
+            lines.append('"%s","%d","Console","1","12 345 K"' % (image, pid))
+        state.write_text("\n".join(lines) + "\n", encoding="ascii")
+
+    write_procs([("System Idle Process", 0), ("cmd.exe", 55),
+                 ("TheEscapists.exe", 4242), ("TheEscapists_rus.exe", 9001)])
+    eng.IS_WINDOWS = True
+    eng.running_pids = real_running_pids
+    check("finds the game processes in tasklist output",
+          eng.running_pids({"theescapists.exe", "theescapists_rus.exe"})
+          == {4242, 9001})
+    write_procs([("System Idle Process", 0)])
+    check("ignores unrelated processes",
+          eng.running_pids({"theescapists.exe"}) == set())
+    write_procs([("TheEscapists_rus.exe", 7)])
+    check("survives a single-column / odd row",
+          eng.running_pids({"theescapists_rus.exe"}) == {7})
+    state.write_text("", encoding="ascii")
+    check("empty tasklist output is not a crash",
+          eng.running_pids({"theescapists.exe"}) == set())
+
+    # end-to-end: front-end exits, real game shows up 1.5 s later, runs 2 s
+    # the Russian release ships the front end plus one 8 MB exe per language
+    for name in ("TheEscapists_rus.exe", "TheEscapists_eur.exe"):
+        (game / name).write_bytes(b"stub")
+    write_procs([("TheEscapists.exe", 4242)])
+    script_rows = [(0.0, [("TheEscapists.exe", 4242)]),
+                   (1.5, [("TheEscapists_rus.exe", 9001)]),
+                   (3.5, [("System Idle Process", 0)])]
+    t0 = [None]
+
+    def tick():
+        now = time.monotonic()
+        if t0[0] is None:
+            t0[0] = now
+        rows = script_rows[0][1]
+        for at, value in script_rows:
+            if now - t0[0] >= at:
+                rows = value
+        write_procs(rows)
+
+    stop = threading.Event()
+
+    def loop():
+        while not stop.is_set():
+            tick()
+            time.sleep(0.05)
+
+    thr = threading.Thread(target=loop)
+    launcher2 = eng.Launcher(game)
+    launcher2.handover = 8.0
+    launcher2.exit_grace = 2.0
+    eng.POLL_IDLE = 0.2
+    eng.POLL_BUSY = 0.1
+    proc2 = FakeProc()
+    proc2.alive = False
+    thr.start()
+    t = time.monotonic()
+    launcher2.wait_for_game(proc2)
+    elapsed = time.monotonic() - t
+    stop.set()
+    thr.join()
+    check("end-to-end handover waits for TheEscapists_rus.exe",
+          4.5 <= elapsed <= 7.5, "elapsed %.1fs" % elapsed)
+    eng.IS_WINDOWS = False
+
+    print("10. dry-run report on a clean tree")
     p4 = run(game, "--report")
     check("report exited cleanly", p4.returncode == 0, p4.stderr[-400:])
     print("     " + "\n     ".join(p4.stdout.strip().splitlines()))
