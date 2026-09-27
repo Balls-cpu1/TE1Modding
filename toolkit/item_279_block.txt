@@ -1,0 +1,10 @@
+
+[279]
+Name=Ведро красной краски
+Illegal=1
+Weapon=1
+Gift=1
+Buy=30
+Decay=5
+Craft=40_Чашка, Чернила
+Info=Red paint bucket. Custom item.

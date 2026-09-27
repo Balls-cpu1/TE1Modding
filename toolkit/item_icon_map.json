@@ -1,0 +1,3093 @@
+{
+ "0": {
+  "name": "Cell Key",
+  "anim": 0,
+  "dir": 0,
+  "handle": 237,
+  "png": "dump_eur/images/00237.png",
+  "size": [
+   76,
+   25
+  ]
+ },
+ "1": {
+  "name": "Staff Key",
+  "anim": 0,
+  "dir": 1,
+  "handle": 238,
+  "png": "dump_eur/images/00238.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "2": {
+  "name": "Pack of Mints",
+  "anim": 0,
+  "dir": 2,
+  "handle": 1269,
+  "png": "dump_eur/images/01269.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "3": {
+  "name": "Guard Outfit",
+  "anim": 0,
+  "dir": 3,
+  "handle": 279,
+  "png": "dump_eur/images/00279.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "4": {
+  "name": "Inmate Outfit",
+  "anim": 0,
+  "dir": 4,
+  "handle": 287,
+  "png": "dump_eur/images/00287.png",
+  "size": [
+   33,
+   15
+  ]
+ },
+ "5": {
+  "name": "Sturdy Shovel",
+  "anim": 0,
+  "dir": 5,
+  "handle": 324,
+  "png": "dump_eur/images/00324.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "6": {
+  "name": "Entrance Key",
+  "anim": 0,
+  "dir": 6,
+  "handle": 325,
+  "png": "dump_eur/images/00325.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "7": {
+  "name": "Utility Key",
+  "anim": 0,
+  "dir": 7,
+  "handle": 252,
+  "png": "dump_eur/images/00252.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "8": {
+  "name": "Lighter",
+  "anim": 0,
+  "dir": 8,
+  "handle": 328,
+  "png": "dump_eur/images/00328.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "9": {
+  "name": "Watch",
+  "anim": 0,
+  "dir": 9,
+  "handle": 327,
+  "png": "dump_eur/images/00327.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "10": {
+  "name": "Bottle of Medicine",
+  "anim": 0,
+  "dir": 10,
+  "handle": 288,
+  "png": "dump_eur/images/00288.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "11": {
+  "name": "Stun Rod",
+  "anim": 0,
+  "dir": 11,
+  "handle": 2130,
+  "png": "dump_eur/images/02130.png",
+  "size": [
+   19,
+   15
+  ]
+ },
+ "12": {
+  "name": "Timber",
+  "anim": 0,
+  "dir": 12,
+  "handle": 330,
+  "png": "dump_eur/images/00330.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "13": {
+  "name": "Roll of Duct Tape",
+  "anim": 0,
+  "dir": 13,
+  "handle": 405,
+  "png": "dump_eur/images/00405.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "14": {
+  "name": "Shaving Cream",
+  "anim": 0,
+  "dir": 14,
+  "handle": 74,
+  "png": "dump_eur/images/00074.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "15": {
+  "name": "Magazine",
+  "anim": 0,
+  "dir": 15,
+  "handle": 246,
+  "png": "dump_eur/images/00246.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "16": {
+  "name": "Bottle of Sleeping Pills",
+  "anim": 0,
+  "dir": 16,
+  "handle": 284,
+  "png": "dump_eur/images/00284.png",
+  "size": [
+   76,
+   25
+  ]
+ },
+ "17": {
+  "name": "Comb",
+  "anim": 0,
+  "dir": 17,
+  "handle": 400,
+  "png": "dump_eur/images/00400.png",
+  "size": [
+   20,
+   20
+  ]
+ },
+ "18": {
+  "name": "Glass Shard",
+  "anim": 0,
+  "dir": 18,
+  "handle": 221,
+  "png": "dump_eur/images/00221.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "19": {
+  "name": "Glass Shank",
+  "anim": 0,
+  "dir": 19,
+  "handle": 3,
+  "png": "dump_eur/images/00003.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "20": {
+  "name": "Dead Rat",
+  "anim": 0,
+  "dir": 20,
+  "handle": 9,
+  "png": "dump_eur/images/00009.png",
+  "size": [
+   14,
+   16
+  ]
+ },
+ "21": {
+  "name": "Fire Extinguisher",
+  "anim": 0,
+  "dir": 21,
+  "handle": 4,
+  "png": "dump_eur/images/00004.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "22": {
+  "name": "Radio Reciever",
+  "anim": 0,
+  "dir": 22,
+  "handle": 12,
+  "png": "dump_eur/images/00012.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "23": {
+  "name": "Plastic Spoon",
+  "anim": 0,
+  "dir": 23,
+  "handle": 937,
+  "png": "dump_eur/images/00937.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "24": {
+  "name": "Screwdriver",
+  "anim": 0,
+  "dir": 24,
+  "handle": 13,
+  "png": "dump_eur/images/00013.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "25": {
+  "name": "Crowbar",
+  "anim": 0,
+  "dir": 25,
+  "handle": 14,
+  "png": "dump_eur/images/00014.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "26": {
+  "name": "Dirt",
+  "anim": 0,
+  "dir": 26,
+  "handle": 29,
+  "png": "dump_eur/images/00029.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "27": {
+  "name": "Plastic Knife",
+  "anim": 0,
+  "dir": 27,
+  "handle": 948,
+  "png": "dump_eur/images/00948.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "28": {
+  "name": "Plastic Fork",
+  "anim": 0,
+  "dir": 28,
+  "handle": 947,
+  "png": "dump_eur/images/00947.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "29": {
+  "name": "Baton",
+  "anim": 0,
+  "dir": 29,
+  "handle": 105,
+  "png": "dump_eur/images/00105.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "30": {
+  "name": "Spatula",
+  "anim": 0,
+  "dir": 30,
+  "handle": 108,
+  "png": "dump_eur/images/00108.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "31": {
+  "name": "Hoe",
+  "anim": 0,
+  "dir": 31,
+  "handle": 1079,
+  "png": "dump_eur/images/01079.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "32": {
+  "name": "Broom",
+  "anim": 1,
+  "dir": 0,
+  "handle": 109,
+  "png": "dump_eur/images/00109.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "33": {
+  "name": "Shears",
+  "anim": 1,
+  "dir": 1,
+  "handle": 110,
+  "png": "dump_eur/images/00110.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "34": {
+  "name": "Hammer",
+  "anim": 1,
+  "dir": 2,
+  "handle": 117,
+  "png": "dump_eur/images/00117.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "35": {
+  "name": "Mop",
+  "anim": 1,
+  "dir": 3,
+  "handle": 122,
+  "png": "dump_eur/images/00122.png",
+  "size": [
+   70,
+   19
+  ]
+ },
+ "36": {
+  "name": "Jar of Ink",
+  "anim": 1,
+  "dir": 4,
+  "handle": 192,
+  "png": "dump_eur/images/00192.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "37": {
+  "name": "Tub of Bleach",
+  "anim": 1,
+  "dir": 5,
+  "handle": 10,
+  "png": "dump_eur/images/00010.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "38": {
+  "name": "Infirmary Overalls",
+  "anim": 1,
+  "dir": 6,
+  "handle": 397,
+  "png": "dump_eur/images/00397.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "39": {
+  "name": "Sturdy Pickaxe",
+  "anim": 1,
+  "dir": 7,
+  "handle": 398,
+  "png": "dump_eur/images/00398.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "40": {
+  "name": "Trowel",
+  "anim": 1,
+  "dir": 8,
+  "handle": 401,
+  "png": "dump_eur/images/00401.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "41": {
+  "name": "Wall Block",
+  "anim": 1,
+  "dir": 9,
+  "handle": 116,
+  "png": "dump_eur/images/00116.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "42": {
+  "name": "Concrete",
+  "anim": 1,
+  "dir": 10,
+  "handle": 403,
+  "png": "dump_eur/images/00403.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "43": {
+  "name": "Work Key",
+  "anim": 1,
+  "dir": 11,
+  "handle": 1233,
+  "png": "dump_eur/images/01233.png",
+  "size": [
+   16,
+   96
+  ]
+ },
+ "44": {
+  "name": "Length of Rope",
+  "anim": 1,
+  "dir": 12,
+  "handle": 486,
+  "png": "dump_eur/images/00486.png",
+  "size": [
+   140,
+   140
+  ]
+ },
+ "45": {
+  "name": "Tube of Toothpaste",
+  "anim": 1,
+  "dir": 13,
+  "handle": 477,
+  "png": "dump_eur/images/00477.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "46": {
+  "name": "Bar of Chocolate",
+  "anim": 1,
+  "dir": 14,
+  "handle": 515,
+  "png": "dump_eur/images/00515.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "47": {
+  "name": "Roll of Toilet Paper",
+  "anim": 1,
+  "dir": 15,
+  "handle": 533,
+  "png": "dump_eur/images/00533.png",
+  "size": [
+   12,
+   18
+  ]
+ },
+ "48": {
+  "name": "Soap",
+  "anim": 1,
+  "dir": 16,
+  "handle": 514,
+  "png": "dump_eur/images/00514.png",
+  "size": [
+   16,
+   18
+  ]
+ },
+ "49": {
+  "name": "Pack of Playing Cards",
+  "anim": 1,
+  "dir": 17,
+  "handle": 534,
+  "png": "dump_eur/images/00534.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "50": {
+  "name": "Book",
+  "anim": 1,
+  "dir": 18,
+  "handle": 654,
+  "png": "dump_eur/images/00654.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "51": {
+  "name": "Tube of Super Glue",
+  "anim": 1,
+  "dir": 19,
+  "handle": 469,
+  "png": "dump_eur/images/00469.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "52": {
+  "name": "Tub of Talcum Powder",
+  "anim": 1,
+  "dir": 20,
+  "handle": 536,
+  "png": "dump_eur/images/00536.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "53": {
+  "name": "Wad of Putty",
+  "anim": 1,
+  "dir": 21,
+  "handle": 657,
+  "png": "dump_eur/images/00657.png",
+  "size": [
+   16,
+   32
+  ]
+ },
+ "54": {
+  "name": "Candle",
+  "anim": 1,
+  "dir": 22,
+  "handle": 329,
+  "png": "dump_eur/images/00329.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "55": {
+  "name": "empty",
+  "anim": 1,
+  "dir": 23,
+  "handle": 153,
+  "png": "dump_eur/images/00153.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "56": {
+  "name": "Balsa Wood",
+  "anim": 1,
+  "dir": 24,
+  "handle": 2374,
+  "png": "dump_eur/images/02374.png",
+  "size": [
+   15,
+   15
+  ]
+ },
+ "57": {
+  "name": "Sail",
+  "anim": 1,
+  "dir": 25,
+  "handle": 2236,
+  "png": "dump_eur/images/02236.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "58": {
+  "name": "Plastic Work Key",
+  "anim": 1,
+  "dir": 26,
+  "handle": 1235,
+  "png": "dump_eur/images/01235.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "59": {
+  "name": "Work Key Mold",
+  "anim": 1,
+  "dir": 27,
+  "handle": 658,
+  "png": "dump_eur/images/00658.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "60": {
+  "name": "Flashlight",
+  "anim": 1,
+  "dir": 28,
+  "handle": 685,
+  "png": "dump_eur/images/00685.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "61": {
+  "name": "Sturdy Cutters",
+  "anim": 1,
+  "dir": 29,
+  "handle": 956,
+  "png": "dump_eur/images/00956.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "62": {
+  "name": "File",
+  "anim": 1,
+  "dir": 30,
+  "handle": 692,
+  "png": "dump_eur/images/00692.png",
+  "size": [
+   19,
+   15
+  ]
+ },
+ "63": {
+  "name": "Dirty Guard Outfit",
+  "anim": 1,
+  "dir": 31,
+  "handle": 69,
+  "png": "dump_eur/images/00069.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "64": {
+  "name": "Dirty Inmate Outfit",
+  "anim": 2,
+  "dir": 0,
+  "handle": 722,
+  "png": "dump_eur/images/00722.png",
+  "size": [
+   240,
+   70
+  ]
+ },
+ "65": {
+  "name": "Uncooked Food",
+  "anim": 2,
+  "dir": 1,
+  "handle": 699,
+  "png": "dump_eur/images/00699.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "66": {
+  "name": "Cooked Food",
+  "anim": 2,
+  "dir": 2,
+  "handle": 709,
+  "png": "dump_eur/images/00709.png",
+  "size": [
+   16,
+   32
+  ]
+ },
+ "67": {
+  "name": "Vent Cover",
+  "anim": 2,
+  "dir": 3,
+  "handle": 139,
+  "png": "dump_eur/images/00139.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "68": {
+  "name": "Stepladder",
+  "anim": 2,
+  "dir": 4,
+  "handle": 256,
+  "png": "dump_eur/images/00256.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "69": {
+  "name": "Bed Sheet",
+  "anim": 2,
+  "dir": 5,
+  "handle": 345,
+  "png": "dump_eur/images/00345.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "70": {
+  "name": "Woodshop key",
+  "anim": 2,
+  "dir": 6,
+  "handle": 455,
+  "png": "dump_eur/images/00455.png",
+  "size": [
+   16,
+   32
+  ]
+ },
+ "71": {
+  "name": "Staff Key Mold",
+  "anim": 2,
+  "dir": 7,
+  "handle": 658,
+  "png": "dump_eur/images/00658.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "72": {
+  "name": "Timber Brace",
+  "anim": 2,
+  "dir": 8,
+  "handle": 869,
+  "png": "dump_eur/images/00869.png",
+  "size": [
+   16,
+   32
+  ]
+ },
+ "73": {
+  "name": "Battery",
+  "anim": 2,
+  "dir": 9,
+  "handle": 873,
+  "png": "dump_eur/images/00873.png",
+  "size": [
+   16,
+   32
+  ]
+ },
+ "74": {
+  "name": "Sock",
+  "anim": 2,
+  "dir": 10,
+  "handle": 866,
+  "png": "dump_eur/images/00866.png",
+  "size": [
+   8,
+   8
+  ]
+ },
+ "75": {
+  "name": "Unvarnished Chair",
+  "anim": 2,
+  "dir": 11,
+  "handle": 922,
+  "png": "dump_eur/images/00922.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "76": {
+  "name": "Sheet of Metal",
+  "anim": 2,
+  "dir": 12,
+  "handle": 857,
+  "png": "dump_eur/images/00857.png",
+  "size": [
+   16,
+   32
+  ]
+ },
+ "77": {
+  "name": "License Plate",
+  "anim": 2,
+  "dir": 13,
+  "handle": 927,
+  "png": "dump_eur/images/00927.png",
+  "size": [
+   16,
+   32
+  ]
+ },
+ "78": {
+  "name": "Metalshop key",
+  "anim": 2,
+  "dir": 14,
+  "handle": 455,
+  "png": "dump_eur/images/00455.png",
+  "size": [
+   16,
+   32
+  ]
+ },
+ "79": {
+  "name": "Bag of Cement",
+  "anim": 2,
+  "dir": 15,
+  "handle": 19,
+  "png": "dump_eur/images/00019.png",
+  "size": [
+   8,
+   13
+  ]
+ },
+ "80": {
+  "name": "Plunger",
+  "anim": 2,
+  "dir": 16,
+  "handle": 31,
+  "png": "dump_eur/images/00031.png",
+  "size": [
+   288,
+   91
+  ]
+ },
+ "81": {
+  "name": "Sheet Rope",
+  "anim": 2,
+  "dir": 17,
+  "handle": 54,
+  "png": "dump_eur/images/00054.png",
+  "size": [
+   110,
+   8
+  ]
+ },
+ "82": {
+  "name": "Utility Key Mold",
+  "anim": 2,
+  "dir": 18,
+  "handle": 658,
+  "png": "dump_eur/images/00658.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "83": {
+  "name": "Cell Key Mold",
+  "anim": 2,
+  "dir": 19,
+  "handle": 658,
+  "png": "dump_eur/images/00658.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "84": {
+  "name": "Molten Plastic",
+  "anim": 2,
+  "dir": 20,
+  "handle": 326,
+  "png": "dump_eur/images/00326.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "85": {
+  "name": "Plastic Utility Key",
+  "anim": 2,
+  "dir": 21,
+  "handle": 338,
+  "png": "dump_eur/images/00338.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "86": {
+  "name": "Plastic Staff Key",
+  "anim": 2,
+  "dir": 22,
+  "handle": 341,
+  "png": "dump_eur/images/00341.png",
+  "size": [
+   9,
+   8
+  ]
+ },
+ "87": {
+  "name": "Plastic Cell Key",
+  "anim": 2,
+  "dir": 23,
+  "handle": 366,
+  "png": "dump_eur/images/00366.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "88": {
+  "name": "Plastic Entrance Key",
+  "anim": 2,
+  "dir": 24,
+  "handle": 490,
+  "png": "dump_eur/images/00490.png",
+  "size": [
+   140,
+   140
+  ]
+ },
+ "89": {
+  "name": "Entrance Key Mold",
+  "anim": 2,
+  "dir": 25,
+  "handle": 658,
+  "png": "dump_eur/images/00658.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "90": {
+  "name": "Cup",
+  "anim": 2,
+  "dir": 26,
+  "handle": 641,
+  "png": "dump_eur/images/00641.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "91": {
+  "name": "Small Speaker",
+  "anim": 2,
+  "dir": 27,
+  "handle": 785,
+  "png": "dump_eur/images/00785.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "92": {
+  "name": "Circuit Board",
+  "anim": 2,
+  "dir": 28,
+  "handle": 809,
+  "png": "dump_eur/images/00809.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "93": {
+  "name": "Paper Clip",
+  "anim": 2,
+  "dir": 29,
+  "handle": 917,
+  "png": "dump_eur/images/00917.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "94": {
+  "name": "Razor Blade",
+  "anim": 2,
+  "dir": 30,
+  "handle": 784,
+  "png": "dump_eur/images/00784.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "95": {
+  "name": "Pillow",
+  "anim": 2,
+  "dir": 31,
+  "handle": 831,
+  "png": "dump_eur/images/00831.png",
+  "size": [
+   64,
+   16
+  ]
+ },
+ "96": {
+  "name": "Toothbrush",
+  "anim": 5,
+  "dir": 0,
+  "handle": 812,
+  "png": "dump_eur/images/00812.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "97": {
+  "name": "Toothbrush Shiv",
+  "anim": 5,
+  "dir": 1,
+  "handle": 843,
+  "png": "dump_eur/images/00843.png",
+  "size": [
+   22,
+   22
+  ]
+ },
+ "98": {
+  "name": "Wire",
+  "anim": 5,
+  "dir": 2,
+  "handle": 852,
+  "png": "dump_eur/images/00852.png",
+  "size": [
+   22,
+   22
+  ]
+ },
+ "99": {
+  "name": "Poster",
+  "anim": 5,
+  "dir": 3,
+  "handle": 775,
+  "png": "dump_eur/images/00775.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "100": {
+  "name": "Foil",
+  "anim": 5,
+  "dir": 4,
+  "handle": 876,
+  "png": "dump_eur/images/00876.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "101": {
+  "name": "Paper Mache",
+  "anim": 5,
+  "dir": 5,
+  "handle": 908,
+  "png": "dump_eur/images/00908.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "102": {
+  "name": "DIY Tattoo Kit",
+  "anim": 5,
+  "dir": 6,
+  "handle": 933,
+  "png": "dump_eur/images/00933.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "103": {
+  "name": "Sock Mace",
+  "anim": 5,
+  "dir": 7,
+  "handle": 875,
+  "png": "dump_eur/images/00875.png",
+  "size": [
+   16,
+   32
+  ]
+ },
+ "104": {
+  "name": "Super Sock Mace",
+  "anim": 5,
+  "dir": 8,
+  "handle": 875,
+  "png": "dump_eur/images/00875.png",
+  "size": [
+   16,
+   32
+  ]
+ },
+ "105": {
+  "name": "Cup of Molten Chocolate",
+  "anim": 5,
+  "dir": 9,
+  "handle": 934,
+  "png": "dump_eur/images/00934.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "106": {
+  "name": "Game Set",
+  "anim": 5,
+  "dir": 10,
+  "handle": 939,
+  "png": "dump_eur/images/00939.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "107": {
+  "name": "Die",
+  "anim": 5,
+  "dir": 11,
+  "handle": 938,
+  "png": "dump_eur/images/00938.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "108": {
+  "name": "Nunchuks",
+  "anim": 5,
+  "dir": 12,
+  "handle": 95,
+  "png": "dump_eur/images/00095.png",
+  "size": [
+   160,
+   56
+  ]
+ },
+ "109": {
+  "name": "Comb Shiv",
+  "anim": 5,
+  "dir": 13,
+  "handle": 936,
+  "png": "dump_eur/images/00936.png",
+  "size": [
+   60,
+   60
+  ]
+ },
+ "110": {
+  "name": "Whip",
+  "anim": 5,
+  "dir": 14,
+  "handle": 943,
+  "png": "dump_eur/images/00943.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "111": {
+  "name": "Knuckle Duster",
+  "anim": 5,
+  "dir": 15,
+  "handle": 942,
+  "png": "dump_eur/images/00942.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "112": {
+  "name": "Grapple Head",
+  "anim": 5,
+  "dir": 16,
+  "handle": 941,
+  "png": "dump_eur/images/",
+  "size": [
+   1,
+   5
+  ]
+ },
+ "113": {
+  "name": "Grappling Hook",
+  "anim": 5,
+  "dir": 17,
+  "handle": 945,
+  "png": "dump_eur/images/00945.png",
+  "size": [
+   60,
+   60
+  ]
+ },
+ "114": {
+  "name": "Lightweight Shovel",
+  "anim": 5,
+  "dir": 18,
+  "handle": 324,
+  "png": "dump_eur/images/00324.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "115": {
+  "name": "Flimsy Shovel",
+  "anim": 5,
+  "dir": 19,
+  "handle": 324,
+  "png": "dump_eur/images/00324.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "116": {
+  "name": "Fake Wall Block",
+  "anim": 5,
+  "dir": 20,
+  "handle": 954,
+  "png": "dump_eur/images/00954.png",
+  "size": [
+   60,
+   60
+  ]
+ },
+ "117": {
+  "name": "Fake Vent Cover",
+  "anim": 5,
+  "dir": 21,
+  "handle": 958,
+  "png": "dump_eur/images/00958.png",
+  "size": [
+   80,
+   80
+  ]
+ },
+ "118": {
+  "name": "Flimsy Pickaxe",
+  "anim": 5,
+  "dir": 22,
+  "handle": 398,
+  "png": "dump_eur/images/00398.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "119": {
+  "name": "Lightweight Pickaxe",
+  "anim": 5,
+  "dir": 23,
+  "handle": 398,
+  "png": "dump_eur/images/00398.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "120": {
+  "name": "Flimsy Cutters",
+  "anim": 5,
+  "dir": 24,
+  "handle": 956,
+  "png": "dump_eur/images/00956.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "121": {
+  "name": "Lightweight Cutters",
+  "anim": 5,
+  "dir": 25,
+  "handle": 956,
+  "png": "dump_eur/images/00956.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "122": {
+  "name": "Tool Handle",
+  "anim": 5,
+  "dir": 26,
+  "handle": 828,
+  "png": "dump_eur/images/00828.png",
+  "size": [
+   43,
+   17
+  ]
+ },
+ "123": {
+  "name": "Crafting Note",
+  "anim": 5,
+  "dir": 27,
+  "handle": 770,
+  "png": "dump_eur/images/00770.png",
+  "size": [
+   140,
+   19
+  ]
+ },
+ "124": {
+  "name": "Comb Blade",
+  "anim": 5,
+  "dir": 28,
+  "handle": 1003,
+  "png": "dump_eur/images/01003.png",
+  "size": [
+   16,
+   32
+  ]
+ },
+ "125": {
+  "name": "Contraband Pouch",
+  "anim": 5,
+  "dir": 29,
+  "handle": 1080,
+  "png": "dump_eur/images/01080.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "126": {
+  "name": "Bed Dummy",
+  "anim": 5,
+  "dir": 30,
+  "handle": 127,
+  "png": "dump_eur/images/00127.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "127": {
+  "name": "POW Outfit",
+  "anim": 5,
+  "dir": 31,
+  "handle": 1230,
+  "png": "dump_eur/images/01230.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "128": {
+  "name": "Cushioned Inmate Outfit",
+  "anim": 6,
+  "dir": 0,
+  "handle": 1242,
+  "png": "dump_eur/images/01242.png",
+  "size": [
+   177,
+   15
+  ]
+ },
+ "129": {
+  "name": "Padded Inmate Outfit",
+  "anim": 6,
+  "dir": 1,
+  "handle": 1240,
+  "png": "dump_eur/images/01240.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "130": {
+  "name": "Plated Inmate Outfit",
+  "anim": 6,
+  "dir": 2,
+  "handle": 306,
+  "png": "dump_eur/images/00306.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "131": {
+  "name": "Medikit",
+  "anim": 6,
+  "dir": 3,
+  "handle": 285,
+  "png": "dump_eur/images/00285.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "132": {
+  "name": "Hat",
+  "anim": 6,
+  "dir": 4,
+  "handle": 91,
+  "png": "dump_eur/images/00091.png",
+  "size": [
+   16,
+   18
+  ]
+ },
+ "133": {
+  "name": "Vest",
+  "anim": 6,
+  "dir": 5,
+  "handle": 337,
+  "png": "dump_eur/images/00337.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "134": {
+  "name": "Underpants",
+  "anim": 6,
+  "dir": 6,
+  "handle": 118,
+  "png": "dump_eur/images/00118.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "135": {
+  "name": "Shorts",
+  "anim": 6,
+  "dir": 7,
+  "handle": 611,
+  "png": "dump_eur/images/00611.png",
+  "size": [
+   16,
+   32
+  ]
+ },
+ "136": {
+  "name": "Needle & Thread",
+  "anim": 6,
+  "dir": 8,
+  "handle": 766,
+  "png": "dump_eur/images/00766.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "137": {
+  "name": "Fabric",
+  "anim": 6,
+  "dir": 9,
+  "handle": 1048,
+  "png": "dump_eur/images/01048.png",
+  "size": [
+   13,
+   13
+  ]
+ },
+ "138": {
+  "name": "Package",
+  "anim": 6,
+  "dir": 10,
+  "handle": 26,
+  "png": "dump_eur/images/00026.png",
+  "size": [
+   8,
+   13
+  ]
+ },
+ "139": {
+  "name": "Package",
+  "anim": 6,
+  "dir": 11,
+  "handle": 863,
+  "png": "dump_eur/images/00863.png",
+  "size": [
+   140,
+   19
+  ]
+ },
+ "140": {
+  "name": "Package",
+  "anim": 6,
+  "dir": 12,
+  "handle": 1427,
+  "png": "dump_eur/images/01427.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "141": {
+  "name": "Letter",
+  "anim": 6,
+  "dir": 13,
+  "handle": 1479,
+  "png": "dump_eur/images/01479.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "142": {
+  "name": "Cushioned POW Outfit",
+  "anim": 6,
+  "dir": 14,
+  "handle": 1239,
+  "png": "dump_eur/images/01239.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "143": {
+  "name": "Padded POW Outfit",
+  "anim": 6,
+  "dir": 15,
+  "handle": 1231,
+  "png": "dump_eur/images/01231.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "144": {
+  "name": "Plated POW Outfit",
+  "anim": 6,
+  "dir": 16,
+  "handle": 734,
+  "png": "dump_eur/images/00734.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "145": {
+  "name": "TV Remote",
+  "anim": 6,
+  "dir": 17,
+  "handle": 28,
+  "png": "dump_eur/images/00028.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "146": {
+  "name": "Sponge",
+  "anim": 6,
+  "dir": 18,
+  "handle": 305,
+  "png": "dump_eur/images/00305.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "147": {
+  "name": "DVD",
+  "anim": 6,
+  "dir": 19,
+  "handle": 365,
+  "png": "dump_eur/images/00365.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "148": {
+  "name": "Cookie",
+  "anim": 6,
+  "dir": 20,
+  "handle": 402,
+  "png": "dump_eur/images/00402.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "149": {
+  "name": "Muffin",
+  "anim": 6,
+  "dir": 21,
+  "handle": 27,
+  "png": "dump_eur/images/00027.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "150": {
+  "name": "Exotic Feather",
+  "anim": 6,
+  "dir": 22,
+  "handle": 2392,
+  "png": "dump_eur/images/02392.png",
+  "size": [
+   210,
+   30
+  ]
+ },
+ "151": {
+  "name": "Bananas",
+  "anim": 6,
+  "dir": 23,
+  "handle": 914,
+  "png": "dump_eur/images/00914.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "152": {
+  "name": "Unsigned ID Papers",
+  "anim": 6,
+  "dir": 24,
+  "handle": 640,
+  "png": "dump_eur/images/00640.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "153": {
+  "name": "ID Papers",
+  "anim": 6,
+  "dir": 25,
+  "handle": 1096,
+  "png": "dump_eur/images/01096.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "154": {
+  "name": "Green Herb",
+  "anim": 6,
+  "dir": 26,
+  "handle": 1097,
+  "png": "dump_eur/images/01097.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "155": {
+  "name": "Red Herb",
+  "anim": 6,
+  "dir": 27,
+  "handle": 1094,
+  "png": "dump_eur/images/01094.png",
+  "size": [
+   64,
+   16
+  ]
+ },
+ "156": {
+  "name": "Silk Handkerchief",
+  "anim": 6,
+  "dir": 28,
+  "handle": 1443,
+  "png": "dump_eur/images/01443.png",
+  "size": [
+   182,
+   141
+  ]
+ },
+ "157": {
+  "name": "Deluxe Toilet Roll",
+  "anim": 6,
+  "dir": 29,
+  "handle": 1222,
+  "png": "dump_eur/images/01222.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "158": {
+  "name": "Dental Floss",
+  "anim": 6,
+  "dir": 30,
+  "handle": 1511,
+  "png": "dump_eur/images/01511.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "159": {
+  "name": "Teddy Bear",
+  "anim": 6,
+  "dir": 31,
+  "handle": 1448,
+  "png": "dump_eur/images/01448.png",
+  "size": [
+   218,
+   185
+  ]
+ },
+ "160": {
+  "name": "Hand Cream",
+  "anim": 7,
+  "dir": 0,
+  "handle": 1533,
+  "png": "dump_eur/images/01533.png",
+  "size": [
+   15,
+   15
+  ]
+ },
+ "161": {
+  "name": "Postcard",
+  "anim": 7,
+  "dir": 1,
+  "handle": 1537,
+  "png": "dump_eur/images/01537.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "162": {
+  "name": "Pedicure Kit",
+  "anim": 7,
+  "dir": 2,
+  "handle": 1536,
+  "png": "dump_eur/images/01536.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "163": {
+  "name": "Hand Fan",
+  "anim": 7,
+  "dir": 3,
+  "handle": 1539,
+  "png": "dump_eur/images/01539.png",
+  "size": [
+   56,
+   16
+  ]
+ },
+ "164": {
+  "name": "Pocket Watch",
+  "anim": 7,
+  "dir": 4,
+  "handle": 1550,
+  "png": "dump_eur/images/01550.png",
+  "size": [
+   32,
+   48
+  ]
+ },
+ "165": {
+  "name": "Family Photo",
+  "anim": 7,
+  "dir": 5,
+  "handle": 1541,
+  "png": "dump_eur/images/01541.png",
+  "size": [
+   177,
+   95
+  ]
+ },
+ "166": {
+  "name": "Service Medal",
+  "anim": 7,
+  "dir": 6,
+  "handle": 1552,
+  "png": "dump_eur/images/01552.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "167": {
+  "name": "Dog Tag",
+  "anim": 7,
+  "dir": 7,
+  "handle": 1551,
+  "png": "dump_eur/images/01551.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "168": {
+  "name": "Vines",
+  "anim": 7,
+  "dir": 8,
+  "handle": 1554,
+  "png": "dump_eur/images/01554.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "169": {
+  "name": "Coconut",
+  "anim": 7,
+  "dir": 9,
+  "handle": 1555,
+  "png": "dump_eur/images/01555.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "170": {
+  "name": "Mango",
+  "anim": 7,
+  "dir": 10,
+  "handle": 1556,
+  "png": "dump_eur/images/01556.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "171": {
+  "name": "Red Chili",
+  "anim": 7,
+  "dir": 11,
+  "handle": 1557,
+  "png": "dump_eur/images/01557.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "172": {
+  "name": "Sand",
+  "anim": 7,
+  "dir": 12,
+  "handle": 1553,
+  "png": "dump_eur/images/01553.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "173": {
+  "name": "Sombrero",
+  "anim": 7,
+  "dir": 13,
+  "handle": 1558,
+  "png": "dump_eur/images/01558.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "174": {
+  "name": "Fake Fence",
+  "anim": 7,
+  "dir": 14,
+  "handle": 1585,
+  "png": "dump_eur/images/01585.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "175": {
+  "name": "Poncho",
+  "anim": 7,
+  "dir": 15,
+  "handle": 1484,
+  "png": "dump_eur/images/01484.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "176": {
+  "name": "Uncooked Burrito",
+  "anim": 7,
+  "dir": 16,
+  "handle": 1571,
+  "png": "dump_eur/images/01571.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "177": {
+  "name": "Burrito",
+  "anim": 7,
+  "dir": 17,
+  "handle": 1564,
+  "png": "dump_eur/images/01564.png",
+  "size": [
+   110,
+   13
+  ]
+ },
+ "178": {
+  "name": "Tribal Drum",
+  "anim": 7,
+  "dir": 18,
+  "handle": 1572,
+  "png": "dump_eur/images/01572.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "179": {
+  "name": "Nails",
+  "anim": 7,
+  "dir": 19,
+  "handle": 1573,
+  "png": "dump_eur/images/01573.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "180": {
+  "name": "Stinger Strip",
+  "anim": 7,
+  "dir": 20,
+  "handle": 1589,
+  "png": "dump_eur/images/01589.png",
+  "size": [
+   257,
+   205
+  ]
+ },
+ "181": {
+  "name": "Multitool",
+  "anim": 7,
+  "dir": 21,
+  "handle": 2170,
+  "png": "dump_eur/images/02170.png",
+  "size": [
+   6,
+   11
+  ]
+ },
+ "182": {
+  "name": "Wooden Bat",
+  "anim": 7,
+  "dir": 22,
+  "handle": 2165,
+  "png": "dump_eur/images/02165.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "183": {
+  "name": "Spiked Bat",
+  "anim": 7,
+  "dir": 23,
+  "handle": 679,
+  "png": "dump_eur/images/00679.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "184": {
+  "name": "Durable Contraband Pouch",
+  "anim": 7,
+  "dir": 24,
+  "handle": 2174,
+  "png": "dump_eur/images/02174.png",
+  "size": [
+   12,
+   11
+  ]
+ },
+ "185": {
+  "name": "Cutting Floss",
+  "anim": 7,
+  "dir": 25,
+  "handle": 2172,
+  "png": "dump_eur/images/02172.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "186": {
+  "name": "Powered Screwdriver",
+  "anim": 7,
+  "dir": 26,
+  "handle": 2177,
+  "png": "dump_eur/images/02177.png",
+  "size": [
+   15,
+   5
+  ]
+ },
+ "187": {
+  "name": "Raft Base",
+  "anim": 7,
+  "dir": 27,
+  "handle": 2246,
+  "png": "dump_eur/images/02246.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "188": {
+  "name": "Makeshift Raft",
+  "anim": 7,
+  "dir": 28,
+  "handle": 2302,
+  "png": "dump_eur/images/02302.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "189": {
+  "name": "Zipline Hook",
+  "anim": 7,
+  "dir": 29,
+  "handle": 1251,
+  "png": "dump_eur/images/01251.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "190": {
+  "name": "DoDo Donut",
+  "anim": 7,
+  "dir": 30,
+  "handle": 2427,
+  "png": "dump_eur/images/02427.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "191": {
+  "name": "Penarium Barrel",
+  "anim": 7,
+  "dir": 31,
+  "handle": 2435,
+  "png": "dump_eur/images/02435.png",
+  "size": [
+   10,
+   10
+  ]
+ },
+ "192": {
+  "name": "Charcoal",
+  "anim": 8,
+  "dir": 0,
+  "handle": 2439,
+  "png": "dump_eur/images/02439.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "193": {
+  "name": "Mixing Container",
+  "anim": 8,
+  "dir": 1,
+  "handle": 2440,
+  "png": "dump_eur/images/02440.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "194": {
+  "name": "Corrugated Iron",
+  "anim": 8,
+  "dir": 2,
+  "handle": 2441,
+  "png": "dump_eur/images/02441.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "195": {
+  "name": "Explosive Mix",
+  "anim": 8,
+  "dir": 3,
+  "handle": 2496,
+  "png": "dump_eur/images/02496.png",
+  "size": [
+   245,
+   131
+  ]
+ },
+ "196": {
+  "name": "Fertilizer",
+  "anim": 8,
+  "dir": 4,
+  "handle": 2449,
+  "png": "dump_eur/images/02449.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "197": {
+  "name": "Makeshift Explosive Round",
+  "anim": 8,
+  "dir": 5,
+  "handle": 2450,
+  "png": "dump_eur/images/02450.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "198": {
+  "name": "Explosive Compound",
+  "anim": 8,
+  "dir": 6,
+  "handle": 2453,
+  "png": "dump_eur/images/02453.png",
+  "size": [
+   4,
+   4
+  ]
+ },
+ "199": {
+  "name": "Makeshift Fuse",
+  "anim": 8,
+  "dir": 7,
+  "handle": 2497,
+  "png": "dump_eur/images/02497.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "200": {
+  "name": "Makeshift Tank Barrel",
+  "anim": 8,
+  "dir": 8,
+  "handle": 2459,
+  "png": "dump_eur/images/02459.png",
+  "size": [
+   32,
+   16
+  ]
+ },
+ "201": {
+  "name": "Makeshift Tank Firing Base",
+  "anim": 8,
+  "dir": 9,
+  "handle": 2462,
+  "png": "dump_eur/images/02462.png",
+  "size": [
+   16,
+   10
+  ]
+ },
+ "202": {
+  "name": "Makeshift Tank Turret",
+  "anim": 8,
+  "dir": 10,
+  "handle": 2465,
+  "png": "dump_eur/images/02465.png",
+  "size": [
+   16,
+   32
+  ]
+ },
+ "203": {
+  "name": "Metal Cone",
+  "anim": 8,
+  "dir": 11,
+  "handle": 2457,
+  "png": "dump_eur/images/02457.png",
+  "size": [
+   16,
+   32
+  ]
+ },
+ "204": {
+  "name": "Metal Tube",
+  "anim": 8,
+  "dir": 12,
+  "handle": 2489,
+  "png": "dump_eur/images/02489.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "205": {
+  "name": "Potassium",
+  "anim": 8,
+  "dir": 13,
+  "handle": 2491,
+  "png": "dump_eur/images/02491.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "206": {
+  "name": "Sovereign Ring",
+  "anim": 8,
+  "dir": 14,
+  "handle": 2490,
+  "png": "dump_eur/images/02490.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "207": {
+  "name": "Taper",
+  "anim": 8,
+  "dir": 15,
+  "handle": 2470,
+  "png": "dump_eur/images/02470.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "208": {
+  "name": "Trash Bag",
+  "anim": 8,
+  "dir": 16,
+  "handle": 2492,
+  "png": "dump_eur/images/02492.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "209": {
+  "name": "Aftershave",
+  "anim": 8,
+  "dir": 17,
+  "handle": 2493,
+  "png": "dump_eur/images/02493.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "210": {
+  "name": "Prisoner Outfit",
+  "anim": 8,
+  "dir": 18,
+  "handle": 2746,
+  "png": "dump_eur/images/02746.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "211": {
+  "name": "Soldier Outfit",
+  "anim": 8,
+  "dir": 19,
+  "handle": 2739,
+  "png": "dump_eur/images/02739.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "212": {
+  "name": "Tape Player",
+  "anim": 8,
+  "dir": 20,
+  "handle": 2845,
+  "png": "dump_eur/images/02845.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "213": {
+  "name": "Voice Recording",
+  "anim": 8,
+  "dir": 21,
+  "handle": 2847,
+  "png": "dump_eur/images/02847.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "214": {
+  "name": "Memoir Tapes",
+  "anim": 8,
+  "dir": 22,
+  "handle": 2849,
+  "png": "dump_eur/images/02849.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "215": {
+  "name": "Tux Outfit",
+  "anim": 8,
+  "dir": 23,
+  "handle": 2850,
+  "png": "dump_eur/images/02850.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "216": {
+  "name": "Dirty Tux Outfit",
+  "anim": 8,
+  "dir": 24,
+  "handle": 2853,
+  "png": "dump_eur/images/02853.png",
+  "size": [
+   18,
+   41
+  ]
+ },
+ "217": {
+  "name": "Blue Putty",
+  "anim": 8,
+  "dir": 25,
+  "handle": 2860,
+  "png": "dump_eur/images/02860.png",
+  "size": [
+   16,
+   19
+  ]
+ },
+ "218": {
+  "name": "Sticky Tape",
+  "anim": 8,
+  "dir": 26,
+  "handle": 2872,
+  "png": "dump_eur/images/02872.png",
+  "size": [
+   48,
+   32
+  ]
+ },
+ "219": {
+  "name": "Dirty Glass",
+  "anim": 8,
+  "dir": 27,
+  "handle": 2854,
+  "png": "dump_eur/images/02854.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "220": {
+  "name": "Keycard",
+  "anim": 8,
+  "dir": 28,
+  "handle": 2878,
+  "png": "dump_eur/images/02878.png",
+  "size": [
+   145,
+   33
+  ]
+ },
+ "221": {
+  "name": "Fake Fingerprint",
+  "anim": 8,
+  "dir": 29,
+  "handle": 2882,
+  "png": "dump_eur/images/02882.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "222": {
+  "name": "Bomb Surprise",
+  "anim": 8,
+  "dir": 30,
+  "handle": 2884,
+  "png": "dump_eur/images/02884.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "223": {
+  "name": "empty",
+  "anim": 8,
+  "dir": 31,
+  "handle": 2883,
+  "png": "dump_eur/images/02883.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "224": {
+  "name": "Fake Decorated Egg",
+  "anim": 9,
+  "dir": 0,
+  "handle": 2886,
+  "png": "dump_eur/images/02886.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "225": {
+  "name": "Flamethrower",
+  "anim": 9,
+  "dir": 1,
+  "handle": 2885,
+  "png": "dump_eur/images/02885.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "226": {
+  "name": "Hairspray",
+  "anim": 9,
+  "dir": 2,
+  "handle": 2888,
+  "png": "dump_eur/images/02888.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "227": {
+  "name": "Fake Shoe",
+  "anim": 9,
+  "dir": 3,
+  "handle": 2889,
+  "png": "dump_eur/images/02889.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "228": {
+  "name": "Henchman Outfit",
+  "anim": 9,
+  "dir": 4,
+  "handle": 2887,
+  "png": "dump_eur/images/02887.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "229": {
+  "name": "Dirty Henchman Outfit",
+  "anim": 9,
+  "dir": 5,
+  "handle": 2890,
+  "png": "dump_eur/images/02890.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "230": {
+  "name": "Shoe Knife",
+  "anim": 9,
+  "dir": 6,
+  "handle": 2891,
+  "png": "dump_eur/images/02891.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "231": {
+  "name": "Cutting Laser Watch",
+  "anim": 9,
+  "dir": 7,
+  "handle": 2892,
+  "png": "dump_eur/images/02892.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "232": {
+  "name": "Metal Rimmed Hat",
+  "anim": 9,
+  "dir": 8,
+  "handle": 2893,
+  "png": "dump_eur/images/02893.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "233": {
+  "name": "Pork Pie Hat",
+  "anim": 9,
+  "dir": 9,
+  "handle": 2894,
+  "png": "dump_eur/images/02894.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "234": {
+  "name": "Stun Pen",
+  "anim": 9,
+  "dir": 10,
+  "handle": 2895,
+  "png": "dump_eur/images/02895.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "235": {
+  "name": "Garotting Wire Watch",
+  "anim": 9,
+  "dir": 11,
+  "handle": 2897,
+  "png": "dump_eur/images/02897.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "236": {
+  "name": "Weak Fingerprint",
+  "anim": 9,
+  "dir": 12,
+  "handle": 2896,
+  "png": "dump_eur/images/02896.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "237": {
+  "name": "Sharp Tea Tray",
+  "anim": 9,
+  "dir": 13,
+  "handle": 3265,
+  "png": "dump_eur/images/03265.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "238": {
+  "name": "Elf Outfit",
+  "anim": 9,
+  "dir": 14,
+  "handle": 3362,
+  "png": "dump_eur/images/03362.png",
+  "size": [
+   32,
+   32
+  ]
+ },
+ "239": {
+  "name": "Guard Elf Outfit",
+  "anim": 9,
+  "dir": 15,
+  "handle": 3763,
+  "png": "dump_eur/images/03763.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "240": {
+  "name": "Bulbs",
+  "anim": 9,
+  "dir": 16,
+  "handle": 3367,
+  "png": "dump_eur/images/03367.png",
+  "size": [
+   19,
+   20
+  ]
+ },
+ "241": {
+  "name": "Cracker",
+  "anim": 9,
+  "dir": 17,
+  "handle": 3370,
+  "png": "dump_eur/images/03370.png",
+  "size": [
+   16,
+   24
+  ]
+ },
+ "242": {
+  "name": "Fairy Lights",
+  "anim": 9,
+  "dir": 18,
+  "handle": 3373,
+  "png": "dump_eur/images/03373.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "243": {
+  "name": "Glitter",
+  "anim": 9,
+  "dir": 19,
+  "handle": 3376,
+  "png": "dump_eur/images/03376.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "244": {
+  "name": "Candy Cane Lever",
+  "anim": 9,
+  "dir": 20,
+  "handle": 3377,
+  "png": "dump_eur/images/03377.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "245": {
+  "name": "Giant Lollipop",
+  "anim": 9,
+  "dir": 21,
+  "handle": 3375,
+  "png": "dump_eur/images/03375.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "246": {
+  "name": "Mince Pie",
+  "anim": 9,
+  "dir": 22,
+  "handle": 3378,
+  "png": "dump_eur/images/03378.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "247": {
+  "name": "Presents",
+  "anim": 9,
+  "dir": 23,
+  "handle": 3380,
+  "png": "dump_eur/images/03380.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "248": {
+  "name": "Stocking",
+  "anim": 9,
+  "dir": 24,
+  "handle": 3379,
+  "png": "dump_eur/images/03379.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "249": {
+  "name": "Tinsel",
+  "anim": 9,
+  "dir": 25,
+  "handle": 3381,
+  "png": "dump_eur/images/03381.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "250": {
+  "name": "Wooden Ball",
+  "anim": 9,
+  "dir": 26,
+  "handle": 3382,
+  "png": "dump_eur/images/03382.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "251": {
+  "name": "Wooden Block",
+  "anim": 9,
+  "dir": 27,
+  "handle": 3384,
+  "png": "dump_eur/images/03384.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "252": {
+  "name": "Wooden Doll",
+  "anim": 9,
+  "dir": 28,
+  "handle": 3385,
+  "png": "dump_eur/images/03385.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "253": {
+  "name": "Wooden Scooter",
+  "anim": 9,
+  "dir": 29,
+  "handle": 3386,
+  "png": "dump_eur/images/03386.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "254": {
+  "name": "Wrapping Paper",
+  "anim": 9,
+  "dir": 30,
+  "handle": 3387,
+  "png": "dump_eur/images/03387.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "255": {
+  "name": "Naughty Letter",
+  "anim": 9,
+  "dir": 31,
+  "handle": 3388,
+  "png": "dump_eur/images/03388.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "256": {
+  "name": "Nice Letter",
+  "anim": 10,
+  "dir": 0,
+  "handle": 3383,
+  "png": "dump_eur/images/03383.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "257": {
+  "name": "Chisel",
+  "anim": 10,
+  "dir": 1,
+  "handle": 3389,
+  "png": "dump_eur/images/03389.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "258": {
+  "name": "Wooden Joystick",
+  "anim": 10,
+  "dir": 2,
+  "handle": 3391,
+  "png": "dump_eur/images/03391.png",
+  "size": [
+   16,
+   32
+  ]
+ },
+ "259": {
+  "name": "Worms game",
+  "anim": 10,
+  "dir": 3,
+  "handle": 3887,
+  "png": "dump_eur/images/03887.png",
+  "size": [
+   198,
+   30
+  ]
+ },
+ "260": {
+  "name": "Baseball Bat",
+  "anim": 10,
+  "dir": 4,
+  "handle": 3888,
+  "png": "dump_eur/images/03888.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "261": {
+  "name": "Magnet",
+  "anim": 10,
+  "dir": 5,
+  "handle": 3937,
+  "png": "dump_eur/images/03937.png",
+  "size": [
+   64,
+   192
+  ]
+ },
+ "262": {
+  "name": "Cork",
+  "anim": 10,
+  "dir": 6,
+  "handle": 3941,
+  "png": "dump_eur/images/03941.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "263": {
+  "name": "Empty Bottle",
+  "anim": 10,
+  "dir": 7,
+  "handle": 3943,
+  "png": "dump_eur/images/03943.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "264": {
+  "name": "Work Hat",
+  "anim": 10,
+  "dir": 8,
+  "handle": 3944,
+  "png": "dump_eur/images/03944.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "265": {
+  "name": "Needle",
+  "anim": 10,
+  "dir": 9,
+  "handle": 3942,
+  "png": "dump_eur/images/03942.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "266": {
+  "name": "Magnetized Needle",
+  "anim": 10,
+  "dir": 10,
+  "handle": 3945,
+  "png": "dump_eur/images/03945.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "267": {
+  "name": "Fuel",
+  "anim": 10,
+  "dir": 11,
+  "handle": 3947,
+  "png": "dump_eur/images/03947.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "268": {
+  "name": "High Beam Flashlight",
+  "anim": 10,
+  "dir": 12,
+  "handle": 3948,
+  "png": "dump_eur/images/03948.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "269": {
+  "name": "Halogen Bulb",
+  "anim": 10,
+  "dir": 13,
+  "handle": 3949,
+  "png": "dump_eur/images/03949.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "270": {
+  "name": "Navigation Lighting",
+  "anim": 10,
+  "dir": 14,
+  "handle": 3946,
+  "png": "dump_eur/images/03946.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "271": {
+  "name": "Reindeer Bowl",
+  "anim": 10,
+  "dir": 15,
+  "handle": 3951,
+  "png": "dump_eur/images/03951.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "272": {
+  "name": "Bottle of Water",
+  "anim": 10,
+  "dir": 16,
+  "handle": 3952,
+  "png": "dump_eur/images/03952.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "273": {
+  "name": "Bowl of Water",
+  "anim": 10,
+  "dir": 17,
+  "handle": 3953,
+  "png": "dump_eur/images/03953.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "274": {
+  "name": "Raw Nasty Carrots",
+  "anim": 10,
+  "dir": 18,
+  "handle": 3950,
+  "png": "dump_eur/images/03950.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "275": {
+  "name": "Juicy Cooked Carrots",
+  "anim": 10,
+  "dir": 19,
+  "handle": 3954,
+  "png": "dump_eur/images/03954.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "276": {
+  "name": "Makeshift Compass",
+  "anim": 10,
+  "dir": 20,
+  "handle": 3955,
+  "png": "dump_eur/images/03955.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "277": {
+  "name": "Red Herring",
+  "anim": 10,
+  "dir": 21,
+  "handle": 3956,
+  "png": "dump_eur/images/03956.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "278": {
+  "name": "Thruster",
+  "anim": 10,
+  "dir": 22,
+  "handle": 3957,
+  "png": "dump_eur/images/03957.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "279": {
+  "name": "",
+  "anim": 10,
+  "dir": 23,
+  "handle": 3933,
+  "png": "dump_eur/images/03933.png",
+  "size": [
+   16,
+   16
+  ]
+ },
+ "280": {
+  "name": "",
+  "anim": 10,
+  "dir": 24,
+  "handle": 3933,
+  "png": "dump_eur/images/03933.png",
+  "size": [
+   16,
+   16
+  ]
+ }
+}
